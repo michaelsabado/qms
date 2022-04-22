@@ -119,46 +119,10 @@
 
 
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+            <?php include '../partials/_admin_footer.php' ?>
+
             <script>
-                initialize();
-
-                function initialize() {
-                    startTime();
-                    fetchupdate();
-                }
-
-                function startTime() {
-                    const today = new Date();
-                    let h = today.getHours();
-                    let m = today.getMinutes();
-                    let s = today.getSeconds();
-                    m = checkTime(m);
-                    s = checkTime(s);
-
-                    if (h < 12) {
-                        e = "AM";
-
-                        if (h == 0) {
-                            h = 12;
-                        }
-
-                    } else {
-                        e = "PM";
-                        h -= 12;
-                    }
-                    document.getElementById('txt').innerHTML = h + ":" + m + " " + e;
-                    setTimeout(startTime, 1000);
-                }
-
-
-
-                function checkTime(i) {
-                    if (i < 10) {
-                        i = "0" + i
-                    }; // add zero in front of numbers < 10
-                    return i;
-                }
+                $("#nav-dash").addClass('mynav-active');
             </script>
 </body>
 

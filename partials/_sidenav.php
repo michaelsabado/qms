@@ -28,7 +28,7 @@
         </div>
         <hr>
         <div class="smalltxt text-muted fw-bold mt-4 mb-2">PAGES</div>
-        <div class=" round-1  p-3 py-2 mb-2 profile-card mynav mynav-active" id="nav-dash">
+        <div class=" round-1  p-3 py-2 mb-2 profile-card mynav " id="nav-dash">
             <div class="d-flex justify-content-start align-items-center">
                 <div style="width: 40px" class=""><i class="fa-solid fa-boxes-stacked "></i></div>
                 <div class="h6 mb-0 fw-">Dashboard</div>
@@ -42,6 +42,7 @@
             </div>
 
         </div>
+
 
         <div class=" round-1 p-3 py-2 profile-card mynav" id="nav-account">
             <div class="d-flex justify-content-start align-items-center">
