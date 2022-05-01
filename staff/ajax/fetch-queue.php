@@ -5,7 +5,7 @@ include '../../database/dbconfig.php';
 
 $counterid = $_SESSION['user']['counterid'];
 
-$sql = "SELECT * FROM `queue` a INNER JOIN `service` b ON a.serviceid = b.serviceid WHERE a.counterid = $counterid";
+$sql = "SELECT * FROM `queue` a INNER JOIN `service` b ON a.serviceid = b.serviceid WHERE a.counterid = $counterid ORDER BY queueid";
 $result = $conn->query($sql);
 
 

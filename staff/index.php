@@ -348,6 +348,7 @@ if (!isset($_SESSION['user'])) {
                         var c2 = 0;
                         pending = 0;
                         served = 0;
+                        $("#pending").text(pending);
                         for (var x = 0; x < queues.length; x++) {
                             var queue = JSON.parse(queues[x]);
 
