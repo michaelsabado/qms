@@ -1,3 +1,19 @@
+<?php
+session_start();
+include '../database/dbconfig.php';
+
+
+if (!isset($_SESSION['user'])) {
+    header("Location: ../main/login.php");
+}
+
+
+$a = $conn->query("SELECT * FROM counter")->num_rows;
+$b = $conn->query("SELECT * FROM service")->num_rows;
+$c = $conn->query("SELECT * FROM user")->num_rows;
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,7 +40,7 @@
                             <div class="card-body p-4">
                                 <div class="display-5 float-end"><i class="fa-solid fa-window-restore"></i></div>
                                 <div class="h6 fw-bold">Counters</div>
-                                <div class="display-5">2</div>
+                                <div class="display-5"><?= $a ?></div>
 
 
                             </div>
@@ -35,7 +51,7 @@
                             <div class="card-body p-4">
                                 <div class="display-5 float-end"><i class="fa-solid fa-hand-holding-heart"></i></div>
                                 <div class="h6 fw-bold">Services</div>
-                                <div class="display-5">7</div>
+                                <div class="display-5"><?= $b ?></div>
 
 
                             </div>
@@ -47,7 +63,7 @@
                                 <div class="display-5 float-end"><i class="fa-solid fa-users"></i></div>
 
                                 <div class="h6 fw-bold">Users</div>
-                                <div class="display-5">3</div>
+                                <div class="display-5"><?= $c ?></div>
 
 
                             </div>
@@ -61,13 +77,24 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="smalltxt">Select Counter</div>
+
                                         <select name="" id="" class="form-select round-1">
-                                            <option value="">Registrar</option>
+                                            <?php
+
+                                            $res = $conn->query("SELECT * FROM counter");
+
+                                            if ($res->num_rows > 0) {
+                                                while ($row = $res->fetch_assoc()) {
+                                                    echo '<option value="' . $row['counterid'] . '">' . $row['countername'] . '</option>';
+                                                }
+                                            }
+
+                                            ?>
                                         </select>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="smalltxt">Select date</div>
-                                        <input type="date" class="form-control round-1 mb-3">
+                                        <input type="date" value="<?= date("Y-m-d") ?>" class="form-control round-1 mb-3">
                                     </div>
                                     <div class="col-md-4">
                                         <div class="smalltxt">.</div>

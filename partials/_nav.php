@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="">
-            <button href="../main/login.php" class="btn btn-light shadow-sm text-danger round-1 px-3 float-end text-decoration-none">Logout <i class="fas fa-sign-out-alt"></i></button>
+            <a href="../main/logout.php" class="btn btn-light shadow-sm text-danger round-1 px-3 float-end text-decoration-none">Logout <i class="fas fa-sign-out-alt"></i></a>
         </div>
     </div>
 </div>

@@ -1,3 +1,9 @@
+<?php
+
+$name = $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['middlename'] . ' ' . $_SESSION['user']['lastname'];
+
+?>
+
 <div class="bg-primary" id="admin-sidebar">
     <div class="myvh p-3 px-4 backdrop">
         <div class="text-center mb-2 py-2 mb-4">
@@ -11,7 +17,7 @@
                 <img src="../images/admin.jpg" id="profile-pic" height="50" alt="">
             </div>
             <div>
-                <div class="h6  fw-bold mb-0">Daniel De Vera</div>
+                <div class="h6  fw-bold mb-0"><?= $name ?></div>
                 <div class="smalltxt mb-0">System Administrator</div>
             </div>
         </div>

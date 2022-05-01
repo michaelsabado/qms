@@ -1,3 +1,72 @@
+<?php
+session_start();
+include '../database/dbconfig.php';
+
+
+
+if (isset($_SESSION['user'])) {
+    redirectMe($_SESSION['user']['usertype']);
+}
+
+
+
+$message = "";
+if (isset($_POST['submit'])) {
+
+    $username = check_input($_POST['username']);
+    $password = check_input($_POST['password']);
+
+    $conn->real_escape_string($username);
+    $conn->real_escape_string($password);
+
+    $sql = "SELECT * FROM user a LEFT JOIN counter b ON a.counterid = b.counterid WHERE username = '$username'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+
+        $user = $result->fetch_assoc();
+
+        if ($user['password'] == $password) {
+
+            $_SESSION['user'] = $user;
+
+            redirectMe($user['usertype']);
+        } else {
+            $message = "Incorrect Password";
+        }
+    } else {
+        $message = "Account not found.";
+    }
+}
+
+function check_input($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+
+
+function redirectMe($val)
+{
+
+    if ($val == 1) {
+        header("Location: ../admin");
+    } else if ($val == 2) {
+        header("Location: ../staff");
+    }
+}
+
+
+
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,7 +85,7 @@
 </head>
 
 <body>
-
+    <?= $message ?>
 
     <div class="">
         <div class="text-center" style="position: relative; z-index: 100;"><img src=" ../images/psu.png" class="mb-3 mt-5" height="130" alt=""></div>
@@ -29,12 +98,12 @@
                 <div class="alert alert-light round-1 shadow-sm border-0 smalltxt" role="alert">
                     Welcome to <b>Queue Management System</b>, please login.
                 </div>
-                <form action="" class="mt-4">
+                <form action="" method="post" class="mt-4">
                     <div class="h6 fw-">Username</div>
-                    <input type="text" class="form-control round-1 mb-3">
+                    <input type="text" name="username" class="form-control round-1 mb-3" required>
                     <div class="h6 fw-">Password</div>
-                    <input type="text" class="form-control round-1 mb-3">
-                    <a href="../staff" class="btn btn-primary round-1 shadow w-100 mt-3 mb-3">Login <i class="fas fa-angle-double-right"></i></a>
+                    <input type="text" name="password" class="form-control round-1 mb-3" required>
+                    <button type="submit" name="submit" class="btn btn-primary round-1 shadow w-100 mt-3 mb-3">Login <i class="fas fa-angle-double-right"></i></button>
                     <div class="text-center">Forgot password?</div>
                 </form>
 

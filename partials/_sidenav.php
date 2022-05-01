@@ -1,3 +1,8 @@
+<?php
+
+$name = $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['lastname'];
+
+?>
 <div class="bg-primary" id="sidebar">
     <div class="myvh p-3 px-4 backdrop">
         <div class="text-center mb-2 py-3 mb-4">
@@ -11,8 +16,8 @@
                 <img src="../images/profile.jpg" id="profile-pic" height="50" alt="">
             </div>
             <div>
-                <div class="h6  fw-bold mb-0">Raymond Fernandez</div>
-                <div class="smalltxt mb-0">Registrar | Staff</div>
+                <div class="h6  fw-bold mb-0"><?= $name ?></div>
+                <div class="smalltxt mb-0"><?= $_SESSION['user']['countername'] ?> | Staff</div>
             </div>
         </div>
         <hr>
