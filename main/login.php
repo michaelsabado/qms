@@ -102,7 +102,7 @@ function redirectMe($val)
                     <div class="h6 fw-">Username</div>
                     <input type="text" name="username" class="form-control round-1 mb-3" required>
                     <div class="h6 fw-">Password</div>
-                    <input type="text" name="password" class="form-control round-1 mb-3" required>
+                    <input type="password" name="password" class="form-control round-1 mb-3" required>
                     <button type="submit" name="submit" class="btn btn-primary round-1 shadow w-100 mt-3 mb-3">Login <i class="fas fa-angle-double-right"></i></button>
                     <div class="text-center">Forgot password?</div>
                 </form>

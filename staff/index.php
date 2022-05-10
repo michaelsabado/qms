@@ -12,7 +12,7 @@ if (!isset($_SESSION['user'])) {
 
 <head>
     <?php include '../partials/_header.php' ?>
-    <title>Counter</title>
+    <title><?= $_SESSION['user']['countername'] ?> Counter</title>
     <style>
         .cb {
             border: 3px solid white;

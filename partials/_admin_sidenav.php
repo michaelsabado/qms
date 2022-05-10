@@ -73,13 +73,14 @@ $name = $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['middlename'] .
         </a>
         <hr>
         <div class="smalltxt text-muted fw- mt-4 mb-2">Account</div>
-        <div class=" round-1  p-3 py-2 mb-2 profile-card mynav " id="nav-dash">
-            <div class="d-flex justify-content-start align-items-center">
-                <div style="width: 40px" class=""><i class="fa-solid fa-user-gear"></i></div>
-                <div class="h6 mb-0 fw-">Credentials</div>
+        <a href="credentials.php" class="text-decoration-none text-white">
+            <div class=" round-1  p-3 py-2 mb-2 profile-card mynav " id="nav-credentials">
+                <div class="d-flex justify-content-start align-items-center">
+                    <div style="width: 40px" class=""><i class="fa-solid fa-user-gear"></i></div>
+                    <div class="h6 mb-0 fw-">Account</div>
+                </div>
+
             </div>
-
-        </div>
-
+        </a>
     </div>
 </div>

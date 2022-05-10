@@ -37,7 +37,7 @@ function check_input($data)
 
 <head>
     <?php include '../partials/_header.php' ?>
-    <title>Services</title>
+    <title>QMS | Users</title>
 
 </head>
 
@@ -57,31 +57,32 @@ function check_input($data)
                 </div>
 
 
-                <div class="card round-2 border-0">
-                    <div class="card-body p-4">
-                        <?= $message ?>
-                        <table id="example" class="table table-striped" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Fullname</th>
-                                    <th>Username</th>
-                                    <th>Usertype</th>
-                                    <th>Assigned Counter</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
+                <div class="card round-2 border-0 shadow-sm">
+                    <div class="card-body p-4 pb-0">
+                        <div class="table-responsive" style="height: calc(100vh - 255px); overflow-y: auto">
+                            <?= $message ?>
+                            <table id="example" class="table  table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Fullname</th>
+                                        <th>Username</th>
+                                        <th>Usertype</th>
+                                        <th>Assigned Counter</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
 
-                                $res = $conn->query("SELECT * FROM user a LEFT JOIN counter b ON a.counterid = b.counterid");
+                                    $res = $conn->query("SELECT * FROM user a LEFT JOIN counter b ON a.counterid = b.counterid");
 
-                                if ($res->num_rows > 0) {
-                                    $count = 1;
-                                    while ($row = $res->fetch_assoc()) {
-                                        if ($row['usertype'] == 1) $usertype = 'Admin';
-                                        else if ($row['usertype'] == 2) $usertype = 'Staff';
-                                        echo ' <tr id="user' . $row['userid'] . '">
+                                    if ($res->num_rows > 0) {
+                                        $count = 1;
+                                        while ($row = $res->fetch_assoc()) {
+                                            if ($row['usertype'] == 1) $usertype = 'Admin';
+                                            else if ($row['usertype'] == 2) $usertype = 'Staff';
+                                            echo ' <tr id="user' . $row['userid'] . '">
                                         <td>' . $count . '</td>
                                         <td>' . $row['firstname'] . ' ' . $row['middlename'] . ' ' . $row['lastname'] . '</td>
                                         <td>' . $row['username'] . '</td>
@@ -90,15 +91,16 @@ function check_input($data)
                                         <td><i class="fa-solid fa-pen-to-square me-3 text-primary"></i><i class="fa-solid fa-trash-can text-danger pointer" onclick="deleteMe(' . $row['userid'] . ')"></i></td>
                                     </tr>';
 
-                                        $count++;
+                                            $count++;
+                                        }
                                     }
-                                }
-                                ?>
+                                    ?>
 
 
-                            </tbody>
+                                </tbody>
 
-                        </table>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -143,8 +145,8 @@ function check_input($data)
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" name="submit" form="addForm" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" name="submit" form="addForm" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                 </div>

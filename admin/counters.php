@@ -31,7 +31,7 @@ function check_input($data)
 
 <head>
     <?php include '../partials/_header.php' ?>
-    <title>Counters</title>
+    <title>QMS | Counters</title>
 
 </head>
 

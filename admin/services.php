@@ -34,7 +34,7 @@ function check_input($data)
 
 <head>
     <?php include '../partials/_header.php' ?>
-    <title>Services</title>
+    <title>QMS | Services</title>
 
 </head>
 
@@ -54,45 +54,48 @@ function check_input($data)
                 </div>
 
 
-                <div class="card round-2 border-0">
-                    <div class="card-body p-4">
-                        <?= $message ?>
-                        <table id="example" class="table table-striped" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Service</th>
-                                    <th>Counter</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
+                <div class="card round-2 border-0 shadow-sm">
+                    <div class="card-body p-4 pb-0">
 
-                                $res = $conn->query("SELECT * FROM service a INNER JOIN counter b ON a.counterid = b.counterid");
+                        <div class="table-responsive" style="height: calc(100vh - 255px); overflow-y: auto">
+                            <?= $message ?>
+                            <table id="example" class="table table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Service</th>
+                                        <th>Counter</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
 
-                                if ($res->num_rows > 0) {
-                                    while ($row = $res->fetch_assoc()) {
-                                        echo '  <tr id="service' . $row['serviceid'] . '">
+                                    $res = $conn->query("SELECT * FROM service a INNER JOIN counter b ON a.counterid = b.counterid");
+
+                                    if ($res->num_rows > 0) {
+                                        while ($row = $res->fetch_assoc()) {
+                                            echo '  <tr id="service' . $row['serviceid'] . '">
                                         <td>' . $row['description'] . '</td>
                                         <td>' . $row['countername'] . '</td>
                                         <td><i class="fa-solid fa-pen-to-square me-3 text-primary"></i><i class="fa-solid fa-trash-can text-danger pointer " onclick="deleteMe(' . $row['serviceid'] . ')"></i></td>
     
                                     </tr>';
-                                    }
-                                } else {
-                                    echo '  <tr id="service' . $row['serviceid'] . '">
+                                        }
+                                    } else {
+                                        echo '  <tr id="service' . $row['serviceid'] . '">
                                     <td colspan="3">Nothing to show</td>
 
                                 </tr>';
-                                }
+                                    }
 
-                                ?>
+                                    ?>
 
 
 
-                            </tbody>
+                                </tbody>
 
-                        </table>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -131,9 +134,9 @@ function check_input($data)
                             </form>
 
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" name="submit" form="addForm" class="btn btn-primary">Save changes</button>
+                        <div class="modal-footer ">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" name="submit" form="addForm" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                 </div>

@@ -1,10 +1,36 @@
+<?php
+session_start();
+include '../database/dbconfig.php';
+?>
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
     <?php include '../partials/_header.php' ?>
     <title>Get Queue</title>
+    <style>
+        .slideShow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: calc(100%);
+            height: calc(100vh - 100px);
+            padding: auto;
+        }
 
+        .slideShow img,
+        .slideShow video {
+            max-width: calc(100%);
+            max-height: calc(100%);
+            opacity: 0;
+            transition: all .5s ease-in-out;
+        }
+
+        .slideShow video {
+            width: calc(100%);
+        }
+    </style>
 </head>
 
 <body>
@@ -41,18 +67,23 @@
                 </div>
             </div>
             <div class="h1 fw-bold mb-2" id="txt">TEST</div>
+            <?php
+            $uploads = $conn->query("SELECT * FROM uploads order by rand() ");
+            $slides = array();
+            while ($row = $uploads->fetch_assoc()) {
+                $slides[] = $row['file_name'];
+            }
+            ?>
+            <div class="slideShow">
 
-            <div class="display-3 fw-bold text-center shadow-sm mb-5 bg-primary py-4" style="color: yellow; border-radius: 10px"><i class="fas fa-bell"></i> ANNOUNCEMENTS</div>
-            <div class="round-1 overflow-hidden"> <video class="w-100 round-1" src='../videos/drone-shot.mp4' autoplay='true' muted='muted' loop></video></div>
-
+            </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <?php include '../partials/_footer.php' ?>
         <script>
             initialize();
 
             function initialize() {
                 startTime();
-                fetchupdate();
             }
 
             function startTime() {
@@ -85,6 +116,61 @@
                     i = "0" + i
                 }; // add zero in front of numbers < 10
                 return i;
+            }
+
+
+            var slides = <?php echo json_encode($slides) ?>;
+            var scount = slides.length;
+            if (scount > 0) {
+                $(document).ready(function() {
+                    render_slides(0)
+                })
+            }
+
+            function render_slides(k) {
+                if (k >= scount)
+                    k = 0;
+                var src = slides[k]
+                k++;
+                var t = src.split('.');
+                var file;
+                t = t[1];
+                if (t == 'mp4') {
+                    file = $("<video id='slide' src='../uploads/" + src + "' onended='render_slides(" + k + ")' autoplay='true' muted='muted'></video>");
+                } else {
+                    file = $("<img id='slide' src='../uploads/" + src + "' onload='slideInterval(" + k + ")' />");
+                }
+                console.log(file)
+                if ($('#slide').length > 0) {
+                    $('#slide').css({
+                        "opacity": 0
+                    });
+                    setTimeout(function() {
+                        $('.slideShow').html('');
+                        $('.slideShow').append(file)
+                        $('#slide').css({
+                            "opacity": 1
+                        });
+                        if (t == 'mp4')
+                            $('video').trigger('play');
+
+
+                    }, 500)
+                } else {
+                    $('.slideShow').append(file)
+                    $('#slide').css({
+                        "opacity": 1
+                    });
+
+                }
+
+            }
+
+            function slideInterval(i = 0) {
+                setTimeout(function() {
+                    render_slides(i)
+                }, 4000)
+
             }
         </script>
 </body>

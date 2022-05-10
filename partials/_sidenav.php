@@ -33,29 +33,33 @@ $name = $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['lastname'];
         </div>
         <hr>
         <div class="smalltxt text-muted fw-bold mt-4 mb-2">PAGES</div>
-        <div class=" round-1  p-3 py-2 mb-2 profile-card mynav " id="nav-dash">
-            <div class="d-flex justify-content-start align-items-center">
-                <div style="width: 40px" class=""><i class="fa-solid fa-boxes-stacked "></i></div>
-                <div class="h6 mb-0 fw-">Dashboard</div>
+        <a href="index.php" class="text-decoration-none text-dark">
+            <div class=" round-1  p-3 py-2 mb-2 profile-card mynav " id="nav-dash">
+                <div class="d-flex justify-content-start align-items-center">
+                    <div style="width: 40px" class=""><i class="fa-solid fa-boxes-stacked "></i></div>
+                    <div class="h6 mb-0 fw-">Dashboard</div>
+                </div>
+
             </div>
+        </a>
+        <a href="records.php" class="text-decoration-none text-dark">
+            <div class=" round-1  p-3 py-2 mb-2 profile-card mynav" id="nav-records">
+                <div class="d-flex justify-content-start align-items-center">
+                    <div style="width: 40px" class=""><i class="fa-solid fa-book "></i></div>
+                    <div class="h6 mb-0 fw-">Records</div>
+                </div>
 
-        </div>
-        <div class=" round-1  p-3 py-2 mb-2 profile-card mynav" id="nav-records">
-            <div class="d-flex justify-content-start align-items-center">
-                <div style="width: 40px" class=""><i class="fa-solid fa-book "></i></div>
-                <div class="h6 mb-0 fw-">Records</div>
             </div>
+        </a>
+        <a href="account.php" class="text-decoration-none text-dark">
+            <div class=" round-1 p-3 py-2 profile-card mynav" id="nav-account">
+                <div class="d-flex justify-content-start align-items-center">
+                    <div style="width: 40px" class=""><i class="fa-solid fa-user-gear"></i></div>
+                    <div class="h6 mb-0 fw-">Account</div>
+                </div>
 
-        </div>
-
-
-        <div class=" round-1 p-3 py-2 profile-card mynav" id="nav-account">
-            <div class="d-flex justify-content-start align-items-center">
-                <div style="width: 40px" class=""><i class="fa-solid fa-user-gear"></i></div>
-                <div class="h6 mb-0 fw-">Account</div>
             </div>
-
-        </div>
+        </a>
         <hr>
 
     </div>

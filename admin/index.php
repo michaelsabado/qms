@@ -19,7 +19,7 @@ $c = $conn->query("SELECT * FROM user")->num_rows;
 
 <head>
     <?php include '../partials/_header.php' ?>
-    <title>Dashboard</title>
+    <title>QMS | Admin Dashboard</title>
 
 </head>
 

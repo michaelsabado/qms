@@ -1,3 +1,15 @@
+<?php
+session_start();
+include '../database/dbconfig.php';
+
+
+if (!isset($_SESSION['user'])) {
+    header("Location: ../main/login.php");
+}
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,6 +25,27 @@
             backdrop-filter: blur(20px);
             z-index: 10;
         }
+
+        .slideShow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: calc(100%);
+            height: calc(100vh - 100px);
+            padding: auto;
+        }
+
+        .slideShow img,
+        .slideShow video {
+            max-width: calc(100%);
+            max-height: calc(100%);
+            opacity: 0;
+            transition: all .5s ease-in-out;
+        }
+
+        .slideShow video {
+            width: calc(100%);
+        }
     </style>
 </head>
 
@@ -21,7 +54,7 @@
 
     <div class="d-flex justify-content-center align-items-center" id="f">
         <div>
-            <button class="btn btn-light btn-lg round-1 shadow" onclick="startMe()">Load Display <i class="fas fa-download"></i></button>
+            <button class="btn btn-light btn-lg round-1 shadow" onclick="startMe()"> Load Display <i class="fas fa-download"></i></button>
         </div>
 
     </div>
@@ -75,9 +108,16 @@
                 <div class="h1 fw-bold text-uppercase"><i class="fas fa-calendar-day me-2"></i><?= date("F d, Y") ?>
                 </div>
             </div>
-            <div class="h1 fw-bold mb-2" id="txt">TEST</div>
-            <div style="height: calc(100vh - 100px)" class="text-center">
-                <img src="../uploads/anc3.png" class="w-100" class="bg-danger">
+            <div class="h1 fw-bold mb-2" id="txt"></div>
+            <?php
+            $uploads = $conn->query("SELECT * FROM uploads order by rand() ");
+            $slides = array();
+            while ($row = $uploads->fetch_assoc()) {
+                $slides[] = $row['file_name'];
+            }
+            ?>
+            <div class="slideShow">
+
             </div>
             <!-- <div class="display-3 fw-bold text-center shadow-sm mb-5 bg-primary py-4" style="color: yellow; border-radius: 10px"><i class="fas fa-bell"></i> ANNOUNCEMENTS</div> -->
             <!-- <video class="w-100 round-2" src='../videos/drone-shot.mp4' autoplay='true' muted='muted' loop></video> -->
@@ -98,15 +138,9 @@
                 }
 
             }
-
-
             $('document').ready(function() {
 
-
-
-
                 setInterval(function() {
-
 
                     $.post('ajax/fetch-queue.php', function(data) {
                         var queues = JSON.parse(data);
@@ -164,9 +198,7 @@
                                     $("#c2-ident").text(queue.identification);
                                     c2++;
 
-
                                     if (queue.iscalled == 1) {
-
 
                                         $.post('ajax/called_queue.php', {
                                             queueid: queue.queueid
@@ -195,6 +227,62 @@
 
                 }, 1000)
             });
+
+
+
+            var slides = <?php echo json_encode($slides) ?>;
+            var scount = slides.length;
+            if (scount > 0) {
+                $(document).ready(function() {
+                    render_slides(0)
+                })
+            }
+
+            function render_slides(k) {
+                if (k >= scount)
+                    k = 0;
+                var src = slides[k]
+                k++;
+                var t = src.split('.');
+                var file;
+                t = t[1];
+                if (t == 'mp4') {
+                    file = $("<video id='slide' src='../uploads/" + src + "' onended='render_slides(" + k + ")' autoplay='true' muted='muted'></video>");
+                } else {
+                    file = $("<img id='slide' src='../uploads/" + src + "' onload='slideInterval(" + k + ")' />");
+                }
+                console.log(file)
+                if ($('#slide').length > 0) {
+                    $('#slide').css({
+                        "opacity": 0
+                    });
+                    setTimeout(function() {
+                        $('.slideShow').html('');
+                        $('.slideShow').append(file)
+                        $('#slide').css({
+                            "opacity": 1
+                        });
+                        if (t == 'mp4')
+                            $('video').trigger('play');
+
+
+                    }, 500)
+                } else {
+                    $('.slideShow').append(file)
+                    $('#slide').css({
+                        "opacity": 1
+                    });
+
+                }
+
+            }
+
+            function slideInterval(i = 0) {
+                setTimeout(function() {
+                    render_slides(i)
+                }, 4000)
+
+            }
         </script>
 </body>
 
