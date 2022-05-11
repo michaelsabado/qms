@@ -2,9 +2,9 @@
 include '../../database/dbconfig.php';
 
 
+$date = date("Y-m-d");
 
-
-$sql = "SELECT * FROM `queue` WHERE `status` = 1";
+$sql = "SELECT * FROM `queue` WHERE date_created LIKE '$date%' AND `status` = 1";
 $result = $conn->query($sql);
 
 

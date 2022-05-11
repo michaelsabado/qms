@@ -17,6 +17,10 @@ if (!isset($_SESSION['user'])) {
     <?php include '../partials/_header.php' ?>
     <title>Get Queue</title>
     <style>
+        body {
+            overflow-y: hidden;
+        }
+
         #f {
             position: fixed;
             height: 100vh;
@@ -110,7 +114,7 @@ if (!isset($_SESSION['user'])) {
             </div>
             <div class="h1 fw-bold mb-2" id="txt"></div>
             <?php
-            $uploads = $conn->query("SELECT * FROM uploads order by rand() ");
+            $uploads = $conn->query("SELECT * FROM uploads  WHERE isEnabled = 1 order by rand() ");
             $slides = array();
             while ($row = $uploads->fetch_assoc()) {
                 $slides[] = $row['file_name'];

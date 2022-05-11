@@ -33,7 +33,7 @@
             e = "PM";
             h -= 12;
         }
-        document.getElementById('txt').innerHTML = h + ":" + m + " " + e;
+        document.getElementById('txt').innerHTML = '<i class="fas fa-clock me-2"></i>' + h + ":" + m + " " + e;
         setTimeout(startTime, 1000);
     }
 

@@ -3,9 +3,10 @@ session_start();
 include '../database/dbconfig.php';
 
 
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 1) {
     header("Location: ../main/login.php");
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -168,6 +169,22 @@ if (!isset($_SESSION['user'])) {
 
                         }
                     })
+                }
+
+
+                function updateMedia(id, val) {
+
+                    if (val == 1) val = 0
+                    else if (val == 0) val = 1
+                    $.post("php/updatemedia.php", {
+                        id,
+                        val
+                    }, function(data) {
+                        console.log(val + ' ' + data);
+                        $("#medias").load("php/getmedias.php");
+                    });
+
+
                 }
             </script>
 

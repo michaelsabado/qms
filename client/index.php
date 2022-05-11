@@ -38,25 +38,29 @@ include '../database/dbconfig.php';
         <div class="vh-100  d-flex align-items-center flex-column justify-content-center" style="width: 40vw;">
             <div class="mb-3"><img src="../images/psu.png" height="150" alt=""></div>
             <div class="h1 fw-bold">Welcome to PSU!</div>
+            <div class="h4 fw-">School of Advanced Studies</div>
             <div class="card border-0 w-100">
                 <div class="card-body p-5">
-                    <div class="h6 fw-bold">Name / School ID</div>
-                    <input type="text" class="form-control form-control-lg mb-4 round-1" placeholder="XX-XX-XXXX" value="18-UR-0698">
-                    <div class="d-flex justify-content-stretch mb-4">
-                        <div class="card text-center p-3 bg-success text-white w-100 me-3 fw-bold mybtn round-1 shadow">
-                            Registrar
+                    <form action="" method="post" id="queue-form">
+                        <div class="h6 fw-bold">1. Name / School ID</div>
+                        <input type="text" name="identification" class="form-control form-control-lg mb-4 round-1" placeholder="Enter here" value="" required>
+                        <div class="h6 fw-bold">2. Select Counter</div>
+                        <div class="d-flex justify-content-stretch mb-4">
+                            <div class="card text-center p-3 w-100 me-3 fw-bold mybtn round-1 shadow" onclick="selectCounter($(this),2)">
+                                Registrar
+                            </div>
+                            <div class="card text-center p-3 w-100 fw-bold mybtn round-1 shadow" onclick="selectCounter($(this),1)">
+                                Cashier
+                            </div>
                         </div>
-                        <div class="card text-center p-3 w-100 fw-bold mybtn round-1 shadow">
-                            Cashier
-                        </div>
-                    </div>
-                    <div class="h6 fw-bold">Service</div>
-                    <select name="" id="" class="form-select form-select-lg mb-5 round-1">
-                        <option value="">Certificate of Grades</option>
-                        <option value="">Apply for Graduation</option>
-                    </select>
+                        <input type="hidden" name="counterid" id="counter-input">
+                        <div class="h6 fw-bold">3. Select Purpose</div>
+                        <select name="serviceid" id="services" class="form-select form-select-lg mb-5 round-1" required>
+                            <option value="">- - -</option>
+                        </select>
 
-                    <a class="btn btn-lg w-100 btn-primary round-1 shadow" href="generate-number.php">Generate Number <i class="fas fa-angle-double-right"></i></a>
+                        <button type="submit" class="btn btn-lg w-100 btn-primary round-1 shadow" href="generate-number.php">4. Generate Number <i class="fas fa-angle-double-right"></i></button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -66,9 +70,9 @@ include '../database/dbconfig.php';
                 <div class="h1 fw-bold text-uppercase"><i class="fas fa-calendar-day me-2"></i><?= date("F d, Y") ?>
                 </div>
             </div>
-            <div class="h1 fw-bold mb-2" id="txt">TEST</div>
+            <div class="h1 fw-bold mb-2" id="txt"></div>
             <?php
-            $uploads = $conn->query("SELECT * FROM uploads order by rand() ");
+            $uploads = $conn->query("SELECT * FROM uploads WHERE isEnabled = 1 order by rand() ");
             $slides = array();
             while ($row = $uploads->fetch_assoc()) {
                 $slides[] = $row['file_name'];
@@ -81,6 +85,37 @@ include '../database/dbconfig.php';
         <?php include '../partials/_footer.php' ?>
         <script>
             initialize();
+
+
+            $("#queue-form").submit(function(e) {
+                e.preventDefault();
+
+                $.post('generate-number.php', $("#queue-form").serialize(), function(data) {
+                    $("#queue-form")[0].reset();
+                    $(".mybtn").removeClass('text-white bg-success');
+                    $("#services").load('get-service.php', {
+                        id: 0
+                    })
+                    var strWindowFeatures = "location=yes,height=282,width=354,scrollbars=no,status=yes";
+                    var URL = "print.php?id=" + data;
+                    var win = window.open(URL, "_blank", strWindowFeatures);
+
+
+
+                });
+            });
+
+
+            function selectCounter(e, id) {
+                $(".mybtn").removeClass('text-white bg-success');
+                e.addClass('text-white bg-success');
+                $("#counter-input").val(id);
+                $("#services").load('get-service.php', {
+                    id
+                }, function(data) {
+                    // alert(data);
+                })
+            }
 
             function initialize() {
                 startTime();

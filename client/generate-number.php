@@ -1,49 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+session_start();
+include '../database/dbconfig.php';
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 
-    <title>Get Queue</title>
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
+$identification = check_input($_POST['identification']);
+$counterid = check_input($_POST['counterid']);
+$serviceid = check_input($_POST['serviceid']);
 
-        }
+$time = date('Y-m-d h:i:s');
+$token = date('hi');
 
-        .smalltxt {
-            font-size: 12px;
-        }
-    </style>
-</head>
+$sql = "INSERT INTO queue VALUES(null, '$identification', $serviceid, $counterid, '$token', 1, '$time', 0)";
+$conn->query($sql);
 
-<body>
-    <div class="d-flex vh-100 justify-content-center align-items-center">
-        <div class="card">
-            <div class="card-body">
-                <div class="text-center p-4">
-                    <div class="h4">18-UR-0698</div>
-                    <div class="display-1 fw-bold">1002</div>
-                    <div class="h5 text-muted fst-italic">Please proceed to Registrar</div>
-                    <div class="h6">Application for Graduation</div>
-                    <div class="smalltxt">
-                        <?= date("Y-m-d h:i:s") ?>
-                    </div>
-                </div>
-            </div>
-        </div>
+echo $conn->insert_id;
 
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script>
-
-    </script>
-</body>
-
-</html>
+function check_input($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}

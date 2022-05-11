@@ -20,7 +20,7 @@ if ($res->num_rows > 0) {
         echo ' <div class="col-md-3 col-12 p-3 border round-2">
         <i class="far fa-trash-alt float-end text-danger pointer" onclick="deleteMedia(' . $row['id'] . ')"></i>
         <div class="form-check form-switch mb-2">
-        <input class="form-check-input" type="checkbox" role="switch"  checked>
+        <input class="form-check-input" type="checkbox" role="switch" ' . (($row['isEnabled'] == 1)  ? 'checked' : '') . ' onchange="updateMedia(' . $row['id'] . ', ' . $row['isEnabled'] . ')">
         <label class="form-check-label" ><i class="fas fa-power-off"></i></label>
         </div>
         <div class="d-flex align-items-center bg-secondary round-1" style="height: 300px; overflow: hidden; background-image: linear-gradient(to right top, #005eff, #009eff, #00c5e8, #00e090, #bdee4f);">

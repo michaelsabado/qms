@@ -2,11 +2,9 @@
 session_start();
 include '../database/dbconfig.php';
 
-
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
     header("Location: ../main/login.php");
 }
-
 $counter = $_SESSION['user']['counterid'];
 
 $date = (isset($_GET['date'])) ? $_GET['date'] : '0000-00-00';

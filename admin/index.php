@@ -3,9 +3,11 @@ session_start();
 include '../database/dbconfig.php';
 
 
-if (!isset($_SESSION['user'])) {
+
+if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 1) {
     header("Location: ../main/login.php");
 }
+
 
 
 $a = $conn->query("SELECT * FROM counter")->num_rows;
