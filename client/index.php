@@ -30,6 +30,10 @@ include '../database/dbconfig.php';
         .slideShow video {
             width: calc(100%);
         }
+
+        .mybtn {
+            background-color: rgba(0, 0, 100, 0.1);
+        }
     </style>
 </head>
 
@@ -46,10 +50,10 @@ include '../database/dbconfig.php';
                         <input type="text" name="identification" class="form-control form-control-lg mb-4 round-1" placeholder="Enter here" value="" required>
                         <div class="h6 fw-bold">2. Select Counter</div>
                         <div class="d-flex justify-content-stretch mb-4">
-                            <div class="card text-center p-3 w-100 me-3 fw-bold mybtn round-1 shadow" onclick="selectCounter($(this),2)">
+                            <div class="card text-center p-3 w-100 me-3 fw-bold mybtn round-1 shadow-sm" onclick="selectCounter($(this),2)">
                                 Registrar
                             </div>
-                            <div class="card text-center p-3 w-100 fw-bold mybtn round-1 shadow" onclick="selectCounter($(this),1)">
+                            <div class="card text-center p-3 w-100 fw-bold mybtn round-1 shadow-sm" onclick="selectCounter($(this),1)">
                                 Cashier
                             </div>
                         </div>
