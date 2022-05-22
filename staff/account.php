@@ -60,84 +60,84 @@ $user = $conn->query($sql)->fetch_assoc();
 
             <div class="content p-5">
                 <div class="h4 fw-  mb-4"><i class="fa-solid fa-book me-3"></i>Account</div>
+                <div class="" style="height: calc(100vh - 190px); overflow-y: auto">
 
 
-
-                <div class="card round-2 border-0 shadow-sm  mb-3">
-                    <div class="card-body p-4">
-                        <div class="smalltxt mb-2 text-muted fst-italic">Manage and protect your account.</div>
-                        <div class="container mt-3">
-                            <div class="h6 fw-bold mb-3">Personal Information</div>
-                            <form action="" method="post">
-                                <div class="row align-items-center mb-3">
-                                    <div class="col-md-3">
-                                        <div class="h6">Firstname</div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text" name="firstname" class="form-control round-1" value="<?= $user['firstname'] ?>" required>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center mb-3">
-                                    <div class="col-md-3">
-                                        <div class="h6">Middlename</div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text" name="middlename" class="form-control round-1" value="<?= $user['middlename'] ?>">
-                                    </div>
-                                </div>
-                                <div class="row align-items-center mb-3">
-                                    <div class="col-md-3">
-                                        <div class="h6">Lastname</div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text" name="lastname" class="form-control round-1" value="<?= $user['lastname'] ?>" required>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <div class="text-end mt-4">
-                                            <button type="submit" name="personal-form" class="btn btn-primary round-1 ">Save <i class="fas fa-save ms-2"></i></button>
+                    <div class="card round-2 border-0 shadow-sm  mb-3">
+                        <div class="card-body p-4">
+                            <div class="smalltxt mb-2 text-muted fst-italic">Manage and protect your account.</div>
+                            <div class="container mt-3">
+                                <div class="h6 fw-bold mb-3">Personal Information</div>
+                                <form action="" method="post">
+                                    <div class="row align-items-center mb-3">
+                                        <div class="col-md-3">
+                                            <div class="h6">Firstname</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" name="firstname" class="form-control round-1" value="<?= $user['firstname'] ?>" required>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
-
-                            <div class="h6 fw-bold mb-3">Credentials</div>
-                            <form action="">
-                                <div class="row align-items-center mb-3">
-                                    <div class="col-md-3">
-                                        <div class="h6">Username</div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control round-1" value="<?= $user['username'] ?>" required>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center mb-3">
-                                    <div class="col-md-3">
-                                        <div class="h6">Old Password</div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control round-1 mb-3" required>
-                                    </div>
-                                    <div class="col-md-5"></div>
-                                    <div class="col-md-3">
-                                        <div class="h6 mb-0">New Password</div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control round-1">
-                                    </div>
-                                    <div class="col-md-7">
-                                        <div class="text-end mt-4">
-                                            <button type="submit" name="credentials-form" class="btn btn-primary round-1 ">Save <i class="fas fa-save ms-2"></i></button>
+                                    <div class="row align-items-center mb-3">
+                                        <div class="col-md-3">
+                                            <div class="h6">Middlename</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" name="middlename" class="form-control round-1" value="<?= $user['middlename'] ?>">
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                    <div class="row align-items-center mb-3">
+                                        <div class="col-md-3">
+                                            <div class="h6">Lastname</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" name="lastname" class="form-control round-1" value="<?= $user['lastname'] ?>" required>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="text-end mt-4">
+                                                <button type="submit" name="personal-form" class="btn btn-primary round-1 ">Save <i class="fas fa-save ms-2"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
 
+                                <div class="h6 fw-bold mb-3">Credentials</div>
+                                <form action="">
+                                    <div class="row align-items-center mb-3">
+                                        <div class="col-md-3">
+                                            <div class="h6">Username</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control round-1" value="<?= $user['username'] ?>" required>
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center mb-3">
+                                        <div class="col-md-3">
+                                            <div class="h6">Old Password</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control round-1 mb-3" required>
+                                        </div>
+                                        <div class="col-md-5"></div>
+                                        <div class="col-md-3">
+                                            <div class="h6 mb-0">New Password</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control round-1">
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="text-end mt-4">
+                                                <button type="submit" name="credentials-form" class="btn btn-primary round-1 ">Save <i class="fas fa-save ms-2"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
                         </div>
                     </div>
+
                 </div>
-
             </div>
-
 
 
 

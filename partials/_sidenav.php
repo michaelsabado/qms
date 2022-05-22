@@ -1,7 +1,9 @@
 <?php
 
 $name = $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['lastname'];
-
+$counter_status = $_SESSION['user']['status'];
+$counter_id = $_SESSION['user']['counterid'];
+// print_r($_SESSION['user']);
 ?>
 <div class="bg-primary" id="sidebar">
     <div class="myvh p-3 px-4 backdrop">
@@ -26,7 +28,7 @@ $name = $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['lastname'];
             <div class="h6 fw-  smalltxt mb-0">Counter Status</div>
             <div class="form-check form-switch mb-0">
 
-                <input class="form-check-input " type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                <input class="form-check-input " type="checkbox" role="switch" id="toggleState" <?= ($counter_status == 1) ? 'checked' : '' ?> onchange="changeStatus(<?= $counter_id ?>)">
                 <!-- <label class="form-check-label" for="flexSwitchCheckChecked">Open</label> -->
             </div>
 
@@ -64,3 +66,33 @@ $name = $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['lastname'];
 
     </div>
 </div>
+
+<script>
+    var status = <?= $counter_status ?>;
+    console.log(status);
+
+    function changeStatus(id) {
+
+
+
+        $.post('ajax/changeStatus.php', {
+            id,
+            status
+        }, function(data) {
+
+            if (data == 1) {
+                $("#state").html(`<b class="text-success">OPEN</b>`);
+            } else if (data == 2) {
+                $("#state").html(`<b class="text-danger">CLOSED</b>`);
+            }
+
+        });
+
+        if (status == 1) {
+            status = 2;
+        } else if (status == 2) {
+            status = 1;
+        }
+
+    }
+</script>

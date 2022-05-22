@@ -8,7 +8,7 @@ $counterid = check_input($_POST['counterid']);
 $serviceid = check_input($_POST['serviceid']);
 
 $time = date('Y-m-d h:i:s');
-$token = date('hi');
+$token = date('is');
 
 $sql = "INSERT INTO queue VALUES(null, '$identification', $serviceid, $counterid, '$token', 1, '$time', 0)";
 $conn->query($sql);

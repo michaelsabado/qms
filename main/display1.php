@@ -3,9 +3,6 @@ session_start();
 include '../database/dbconfig.php';
 
 
-if (!isset($_SESSION['user'])) {
-    header("Location: ../main/login.php");
-}
 
 
 
@@ -143,7 +140,12 @@ if (!isset($_SESSION['user'])) {
 
             }
             $('document').ready(function() {
-
+                function speak(message) {
+                    var msg = new SpeechSynthesisUtterance(message)
+                    var voices = window.speechSynthesis.getVoices()
+                    msg.voice = voices[0]
+                    window.speechSynthesis.speak(msg)
+                }
                 setInterval(function() {
 
                     $.post('ajax/fetch-queue.php', function(data) {
@@ -160,23 +162,31 @@ if (!isset($_SESSION['user'])) {
 
                         for (var x = 0; x < queues.length; x++) {
                             var queue = JSON.parse(queues[x]);
-
+                            // console.log(queue);
                             if (queue.counterid == 2) {
 
                                 if ((c1 == 0 && queue.iscalled == 1) || queue.iscalled == 2) {
+
                                     $("#c1-ns").text(queue.token);
                                     $("#c1-ident").text(queue.identification);
                                     c1++;
 
                                     if (queue.iscalled == 1) {
-
-
+                                        console.log(queue);
+                                        var message = queue.token.split('').join(' ');
                                         $.post('ajax/called_queue.php', {
                                             queueid: queue.queueid
                                         }, function(data) {
+
                                             document.getElementById("callaudio").pause();
                                             document.getElementById("callaudio").currentTime = 0;
+
+                                            console.log(queue);
+                                            console.log('Counter 2: ' + queue.queueid);
                                             $("#trigger-audio").click();
+                                            setTimeout(function() {
+                                                speak(message);
+                                            }, 3500)
 
                                             blink_text($("#c1-ns"));
                                             blink_text($("#c1-ident"));
@@ -203,13 +213,19 @@ if (!isset($_SESSION['user'])) {
                                     c2++;
 
                                     if (queue.iscalled == 1) {
-
+                                        var m = queue.token.split('').join(' ');
                                         $.post('ajax/called_queue.php', {
                                             queueid: queue.queueid
                                         }, function(data) {
                                             document.getElementById("callaudio").pause();
                                             document.getElementById("callaudio").currentTime = 0;
+
+
+                                            console.log('Counter 1: ' + m);
                                             $("#trigger-audio").click();
+                                            setTimeout(function() {
+                                                speak(m);
+                                            }, 3500)
 
                                             blink_text($("#c2-ns"));
                                             blink_text($("#c2-ident"));
