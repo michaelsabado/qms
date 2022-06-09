@@ -82,8 +82,12 @@ $counter_id = $_SESSION['user']['counterid'];
 
             if (data == 1) {
                 $("#state").html(`<b class="text-success">OPEN</b>`);
+                $("#master").removeClass('blurme');
+
             } else if (data == 2) {
                 $("#state").html(`<b class="text-danger">CLOSED</b>`);
+                $("#master").addClass('blurme');
+
             }
 
         });

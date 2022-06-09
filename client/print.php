@@ -34,35 +34,44 @@ function check_input($data)
     <style>
         body {
             font-family: 'Poppins', sans-serif;
+            color: black;
+            margin: 0;
 
         }
 
         .smalltxt {
-            font-size: 12px;
+            font-size: 11px;
+        }
+
+        .smalltxt1 {
+            font-size: 9px;
         }
     </style>
 </head>
 
 <body>
-    <div class="d-flex vh-100 justify-content-center align-items-center">
-        <div class="card">
-            <div class="card-body">
-                <div class="text-center p-4">
-                    <div class="h4"><?= $data['identification'] ?></div>
-                    <div class="display-1 fw-bold"><?= $data['token'] ?></div>
-                    <div class="h5 text-muted fst-italic">Please proceed to <?= $data['countername'] ?></div>
-                    <div class="h6"><?= $data['description'] ?></div>
-                    <div class="smalltxt">
-                        <?= $time ?>
-                    </div>
-                </div>
-            </div>
+    <div class="text-center mb-4">
+        <div class="h6"><?= $data['identification'] ?></div>
+        <div class="display-1 fw-bold"><?= $data['token'] ?></div>
+        <div class="h5  fst-italic fw-bold smalltxt">Please proceed to <?= $data['countername'] ?></div>
+        <div class="h6 smalltxt "><?= $data['description'] ?></div>
+        <div class="smalltxt fst-italic">
+            <?= $time ?>
         </div>
-
     </div>
+    <div class="h6 text-center">* * * * *</div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script>
         window.print();
+
+        window.onafterprint = function() {
+
+            window.location.href = "index.php";
+
+
+        }
     </script>
 </body>
 

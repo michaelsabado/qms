@@ -100,11 +100,11 @@ include '../database/dbconfig.php';
                     $("#services").load('get-service.php', {
                         id: 0
                     })
-                    var strWindowFeatures = "location=yes,height=282,width=354,scrollbars=no,status=yes";
+                    var strWindowFeatures = "location=yes,scrollbars=no,status=yes";
                     var URL = "print.php?id=" + data;
-                    var win = window.open(URL, "_blank", strWindowFeatures);
+                    // var win = window.open(URL, "_blank", strWindowFeatures);
 
-
+                    window.location.href = URL;
 
                 });
             });

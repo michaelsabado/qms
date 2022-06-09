@@ -1,5 +1,6 @@
 body {
     font-family: "Poppins", sans-serif;
+    overflow-y: hidden;
 }
 
 .myvh {
@@ -85,6 +86,11 @@ body {
 
 .box {
     border-left: 5px solid #333;
+}
+
+.blurme {
+    filter: blur(10px) saturate(50%);
+    pointer-events: none;
 }
 
 

@@ -147,104 +147,126 @@ include '../database/dbconfig.php';
                     window.speechSynthesis.speak(msg)
                 }
                 setInterval(function() {
+                    $.post('ajax/checkCounter.php', {
+                        id: 2
+                    }, function(data) {
 
-                    $.post('ajax/fetch-queue.php', function(data) {
-                        var queues = JSON.parse(data);
-
-                        $('#counter1').html('');
-                        $('#counter2').html('');
-                        $('#c1-ns').text('-');
-                        $('#c2-ns').text('-');
-                        $('#c1-ident').text('-');
-                        $('#c2-ident').text('-');
-                        var c1 = 0;
-                        var c2 = 0;
-
-                        for (var x = 0; x < queues.length; x++) {
-                            var queue = JSON.parse(queues[x]);
-                            // console.log(queue);
-                            if (queue.counterid == 2) {
-
-                                if ((c1 == 0 && queue.iscalled == 1) || queue.iscalled == 2) {
-
-                                    $("#c1-ns").text(queue.token);
-                                    $("#c1-ident").text(queue.identification);
-                                    c1++;
-
-                                    if (queue.iscalled == 1) {
-                                        console.log(queue);
-                                        var message = queue.token.split('').join(' ');
-                                        $.post('ajax/called_queue.php', {
-                                            queueid: queue.queueid
-                                        }, function(data) {
-
-                                            document.getElementById("callaudio").pause();
-                                            document.getElementById("callaudio").currentTime = 0;
-
-                                            console.log(queue);
-                                            console.log('Counter 2: ' + queue.queueid);
-                                            $("#trigger-audio").click();
-                                            setTimeout(function() {
-                                                speak(message);
-                                            }, 3500)
-
-                                            blink_text($("#c1-ns"));
-                                            blink_text($("#c1-ident"));
-                                        });
-                                    };
-
-                                } else {
-                                    var element = `  <div class="card mb-3 bg-light shadow-sm border-0 round-1">
-                                            <div class="card-body">
-                                                <div class="h2 mb-0 fw-bold text-center">` + queue.token + `</div>
-                                            </div>
-                                        </div>`;
-
-                                    $('#counter1').append(element);
-                                }
+                        var counter = JSON.parse(data);
+                        // console.log(counter);
 
 
+                        $.post('ajax/fetch-queue.php', function(data) {
+                            var queues = JSON.parse(data);
 
+                            $('#counter1').html('');
+                            $('#counter2').html('');
+                            $('#c1-ns').text('-');
+                            $('#c2-ns').text('-');
+                            $('#c1-ident').text('-');
+                            $('#c2-ident').text('-');
+                            var c1 = 0;
+                            var c2 = 0;
 
-                            } else if (queue.counterid == 1) {
-                                if ((c2 == 0 && queue.iscalled == 1) || queue.iscalled == 2) {
-                                    $("#c2-ns").text(queue.token);
-                                    $("#c2-ident").text(queue.identification);
-                                    c2++;
+                            var c_reg = JSON.parse(counter[1]);
+                            if (c_reg.status == 2) {
 
-                                    if (queue.iscalled == 1) {
-                                        var m = queue.token.split('').join(' ');
-                                        $.post('ajax/called_queue.php', {
-                                            queueid: queue.queueid
-                                        }, function(data) {
-                                            document.getElementById("callaudio").pause();
-                                            document.getElementById("callaudio").currentTime = 0;
-
-
-                                            console.log('Counter 1: ' + m);
-                                            $("#trigger-audio").click();
-                                            setTimeout(function() {
-                                                speak(m);
-                                            }, 3500)
-
-                                            blink_text($("#c2-ns"));
-                                            blink_text($("#c2-ident"));
-                                        });
-                                    };
-                                } else {
-                                    var element = `  <div class="card mb-3 bg-light shadow-sm border-0 round-1">
-                                    <div class="card-body">
-                                        <div class="h2 mb-0 fw-bold text-center">` + queue.token + `</div>
-                                    </div>
-                                </div>`;
-
-                                    $('#counter2').append(element);
-                                }
+                                $("#c1-ns").html("<div class='display-3 fw-bold text-danger mt-5'>CLOSED</div>");
+                                $("#c1-ident").text('');
                             }
-                        }
+                            var c_cash = JSON.parse(counter[0]);
+                            if (c_cash.status == 2) {
+
+                                $("#c2-ns").html("<div class='display-3 fw-bold text-danger mt-5'>CLOSED</div>");
+                                $("#c2-ident").text('');
+                            }
+                            for (var x = 0; x < queues.length; x++) {
+                                var queue = JSON.parse(queues[x]);
+                                // console.log(queue);
+
+
+
+                                if (queue.counterid == 2 && c_reg.status == 1) {
+                                    if ((c1 == 0 && queue.iscalled == 1) || queue.iscalled == 2) {
+
+                                        $("#c1-ns").text(queue.token);
+                                        $("#c1-ident").text(queue.identification);
+                                        c1++;
+
+                                        if (queue.iscalled == 1) {
+                                            // console.log(queue);
+                                            var message = queue.token.split('').join(' ');
+                                            $.post('ajax/called_queue.php', {
+                                                queueid: queue.queueid
+                                            }, function(data) {
+
+                                                document.getElementById("callaudio").pause();
+                                                document.getElementById("callaudio").currentTime = 0;
+
+                                                // console.log(queue);
+                                                // console.log('Counter 2: ' + queue.queueid);
+                                                $("#trigger-audio").click();
+                                                setTimeout(function() {
+                                                    speak(message);
+                                                }, 3500)
+
+                                                blink_text($("#c1-ns"));
+                                                blink_text($("#c1-ident"));
+                                            });
+                                        };
+
+                                    } else {
+                                        var element = `  <div class="card mb-3 bg-light shadow-sm border-0 round-1">
+            <div class="card-body">
+                <div class="h2 mb-0 fw-bold text-center">` + queue.token + `</div>
+            </div>
+        </div>`;
+
+                                        $('#counter1').append(element);
+                                    }
+
+                                } else if (queue.counterid == 1 && c_cash.status == 1) {
+
+                                    if ((c2 == 0 && queue.iscalled == 1) || queue.iscalled == 2) {
+                                        $("#c2-ns").text(queue.token);
+                                        $("#c2-ident").text(queue.identification);
+                                        c2++;
+
+                                        if (queue.iscalled == 1) {
+                                            var m = queue.token.split('').join(' ');
+                                            $.post('ajax/called_queue.php', {
+                                                queueid: queue.queueid
+                                            }, function(data) {
+                                                document.getElementById("callaudio").pause();
+                                                document.getElementById("callaudio").currentTime = 0;
+
+
+                                                // console.log('Counter 1: ' + m);
+                                                $("#trigger-audio").click();
+                                                setTimeout(function() {
+                                                    speak(m);
+                                                }, 3500)
+
+                                                blink_text($("#c2-ns"));
+                                                blink_text($("#c2-ident"));
+                                            });
+                                        };
+                                    } else {
+                                        var element = `  <div class="card mb-3 bg-light shadow-sm border-0 round-1">
+                                <div class="card-body">
+                                    <div class="h2 mb-0 fw-bold text-center">` + queue.token + `</div>
+                                </div>
+                            </div>`;
+
+                                        $('#counter2').append(element);
+                                    }
+
+                                }
+
+
+                            }
+                        });
+
                     });
-
-
                 }, 1000)
             });
 

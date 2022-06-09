@@ -16,6 +16,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
     <style>
         .cb {
             border: 3px solid white;
+
         }
 
         .cb:hover {
@@ -36,12 +37,12 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
             <div class="content p-5">
                 <div class="h4 fw-  mb-4"><i class="fa-solid fa-boxes-stacked me-3"></i>Dashboard</div>
 
-                <div class="row">
-                    <div class="col-md-6">
+                <div class="row <?= ($_SESSION['user']['status'] == 2) ? "blurme" : "" ?>" id="master">
+                    <div class="col-md-8">
                         <div class="card round-2 shadow-sm  mb-3" style="   border: 3px solid rgb(13, 110, 253);">
                             <div class="card-body p-4">
                                 <div class="h5 fw-bold text-primary">Now Serving</div>
-                                <div class="text- fw- mb-0" style="font-size: 90px;" id="c1-ns">
+                                <div class="text- fw- mb-0" style="font-size: 80px;" id="c1-ns">
                                     <div class="spinner-grow text-primary" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
@@ -104,7 +105,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                 <div class="card border-0 shadow-sm round-1">
                                     <div class="card-body">
                                         <div class="h6 fw-bold text-center text-success mb-3"><i class="fas fa-angle-double-down me-2"></i>Next Clients <i class="fas fa-angle-double-down ms-1"></i></div>
-                                        <ul class="list-group list-group-flush" id="nextqueue" style="height: 223px; overflow-y: auto">
+                                        <ul class="list-group list-group-flush" id="nextqueue" style="height: 208px; overflow-y: auto">
                                             <div class="spinner-grow text-primary" role="status">
                                                 <span class="visually-hidden">Loading...</span>
                                             </div>
