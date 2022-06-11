@@ -193,93 +193,107 @@ include '../database/dbconfig.php';
                         console.log(counter);
 
                         for (var y = 0; y < counter.length; y++) {
-                            if (counter[y].status == 1) {
-                                $('#window' + counter[y].windowno).text('');
-                                $("#c" + counter[y].windowno + "-ns").text("-");
-                                $.ajax({
-                                    type: "POST",
-                                    url: 'ajax/fetch-queue.php',
-                                    data: {
-                                        id: counter[y].counterid
-                                    },
-                                    async: false,
-                                    success: function(data) {
-                                        var queues = JSON.parse(data);
+                            var next_count = 0;
+                            $('#window' + counter[y].windowno).text('');
+                            $("#c" + counter[y].windowno + "-ns").text("-");
+                            $.ajax({
+                                type: "POST",
+                                url: 'ajax/fetch-queue.php',
+                                data: {
+                                    id: counter[y].counterid
+                                },
+                                async: false,
+                                success: function(data) {
+                                    var queues = JSON.parse(data);
 
 
 
 
-                                        $("c" + counter[y].windowno + "-ns").text('-');
-                                        var c1 = 0;
+                                    $("c" + counter[y].windowno + "-ns").text('-');
+                                    var c1 = 0;
 
-                                        console.log(queues);
+                                    console.log(queues);
 
-                                        for (var x = 0; x < queues.length; x++) {
-                                            var queue = JSON.parse(queues[x]);
-
-
-                                            if ((c1 == 0 && queue.iscalled == 1) || queue.iscalled == 2) {
-                                                console.log('Hello');
-                                                $("#c" + counter[y].windowno + "-ns").text(queue.token);
-                                                $("#c" + counter[y].windowno + "-ident").text(queue.identification);
-                                                c1++;
-
-                                                if (queue.iscalled == 1) {
-                                                    // console.log(queue);
-                                                    var message = queue.token.split('').join(' ');
-                                                    message += ", window " + counter[y].windowno;
-
-                                                    $.ajax({
-                                                        type: "POST",
-                                                        url: 'ajax/called_queue.php',
-                                                        data: {
-                                                            queueid: queue.queueid
-                                                        },
-                                                        async: false,
-                                                        success: function(data) {
-
-                                                            document.getElementById("callaudio").pause();
-                                                            document.getElementById("callaudio").currentTime = 0;
-
-                                                            // console.log(queue);
-                                                            // console.log('Counter 2: ' + queue.queueid);
-                                                            $("#trigger-audio").click();
-                                                            setTimeout(function() {
-                                                                speak(message);
-                                                            }, 2500)
-
-                                                            blink_text($("#c" + counter[y].windowno + "-ns"));
-                                                        }
-                                                    });
+                                    for (var x = 0; x < queues.length; x++) {
+                                        var queue = JSON.parse(queues[x]);
 
 
+                                        if ((c1 == 0 && queue.iscalled == 1) || queue.iscalled == 2) {
+                                            console.log('Hello');
+                                            $("#c" + counter[y].windowno + "-ns").text(queue.token);
+                                            $("#c" + counter[y].windowno + "-ident").text(queue.identification);
+                                            c1++;
 
-                                                    $.post('ajax/called_queue.php', {
+                                            if (queue.iscalled == 1) {
+                                                // console.log(queue);
+                                                var message = queue.token.split('').join(' ');
+                                                message += ", window " + counter[y].windowno;
+
+                                                $.ajax({
+                                                    type: "POST",
+                                                    url: 'ajax/called_queue.php',
+                                                    data: {
                                                         queueid: queue.queueid
-                                                    }, function(data) {
+                                                    },
+                                                    async: false,
+                                                    success: function(data) {
 
-                                                        // blink_text($("#c" + counter[y].windowno + "-ident"));
-                                                    });
-                                                };
+                                                        document.getElementById("callaudio").pause();
+                                                        document.getElementById("callaudio").currentTime = 0;
 
-                                            } else {
-                                                var element = `  <div class="card mb-2 bg-light shadow-sm border-0 round-1">
+                                                        // console.log(queue);
+                                                        // console.log('Counter 2: ' + queue.queueid);
+                                                        $("#trigger-audio").click();
+                                                        setTimeout(function() {
+                                                            speak(message);
+                                                        }, 2500)
+
+                                                        blink_text($("#c" + counter[y].windowno + "-ns"));
+                                                    }
+                                                });
+
+
+
+                                                $.post('ajax/called_queue.php', {
+                                                    queueid: queue.queueid
+                                                }, function(data) {
+
+                                                    // blink_text($("#c" + counter[y].windowno + "-ident"));
+                                                });
+                                            };
+
+                                        } else {
+                                            next_count++;
+                                            var element;
+                                            if (next_count <= 3) {
+                                                element = `  <div class="card mb-1 bg-light shadow-sm border-0 round-1">
                                                     <div class="card-body py-1">
-                                                        <div class="h2 mb-0 fw-bold text-center">` + queue.token + `</div>
+                                                        <div class="h4 mb-0 fw-bold text-center">` + queue.token + `</div>
                                                     </div>
                                                 </div>`;
+                                                $('#window' + counter[y].windowno).append(element);
+                                            } else if (next_count == 4) {
 
+                                                element = ` <div class="card mb-1 bg-light shadow-sm border-0 round-1">
+                                                    <div class="card-body py-0">
+                                                       <div class="h6 mb-0"><i class="fas fa-ellipsis-h"></i></>
+                                                    </div>
+                                                </div>`;
                                                 $('#window' + counter[y].windowno).append(element);
                                             }
 
 
 
-
                                         }
-                                    }
-                                });
 
-                            } else {
+
+
+
+                                    }
+                                }
+                            });
+
+                            if (counter[y].status == 2) {
                                 $("#c" + counter[y].windowno + "-ns").html("<div class='display-5 fw-bold mt-2' style='color: rgba(250,250,250,0.6)'>CLOSED</div>");
                                 //     $("#c1-ident").text('');
                             }

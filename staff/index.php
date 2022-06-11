@@ -179,6 +179,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                 var currenttoken = 0;
                 var nexttoken = 0;
                 var currenttoken_data;
+                var majorid;
 
 
                 document.addEventListener("keydown", function(e) {
@@ -308,9 +309,10 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                         $.post('ajax/transfer.php', {
                             counterid: counter,
                             currenttoken: currenttoken_data,
-                            nexttoken: nexttoken
+                            nexttoken: nexttoken,
+                            maojorid: majorid
                         }, function(data) {
-                            // alert(data)
+                            alert(data)
 
                             $("#close-canvass").click();
                             Swal.fire({
@@ -369,6 +371,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                     $('#c1-service').text(queue.description);
                                     currenttoken = queue.queueid;
                                     currenttoken_data = queue;
+                                    majorid = queue.majorid
                                     c1++;
 
                                 } else {
