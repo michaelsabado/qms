@@ -25,7 +25,7 @@ $name = $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['middlename'] .
 
 
         <a href="index.php" class="text-decoration-none text-white">
-            <div class=" round-1  p-3 py-2 mb-2 profile-card mynav" id="nav-dash">
+            <div class=" round-1  p-3 py-2 profile-card mynav" id="nav-dash">
                 <div class="d-flex justify-content-start align-items-center">
                     <div style="width: 40px" class=""><i class="fa-solid fa-boxes-stacked "></i></div>
                     <div class="h6 mb-0 fw-">Dashbooard</div>
@@ -35,17 +35,26 @@ $name = $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['middlename'] .
         </a>
         <hr>
         <div class="smalltxt text-muted fw- mt-4 mb-2">Record Management</div>
-        <a href="counters.php" class="text-decoration-none text-white">
-            <div class=" round-1  p-3 py-2 mb-2 profile-card mynav " id="nav-counter">
+        <a href="programs.php" class="text-decoration-none text-white">
+            <div class=" round-1  p-3 py-2 profile-card mynav " id="nav-programs">
                 <div class="d-flex justify-content-start align-items-center">
                     <div style="width: 40px" class=""><i class="fa-solid fa-window-restore"></i></div>
-                    <div class="h6 mb-0 fw-">Counters</div>
+                    <div class="h6 mb-0 fw-">Programs</div>
+                </div>
+
+            </div>
+        </a>
+        <a href="counters.php" class="text-decoration-none text-white">
+            <div class=" round-1  p-3 py-2 profile-card mynav " id="nav-counter">
+                <div class="d-flex justify-content-start align-items-center">
+                    <div style="width: 40px" class=""><i class="fa-solid fa-window-restore"></i></div>
+                    <div class="h6 mb-0 fw-">Windows</div>
                 </div>
 
             </div>
         </a>
         <a href="services.php" class="text-decoration-none text-white">
-            <div class=" round-1  p-3 py-2 mb-2 profile-card mynav" id="nav-service">
+            <div class=" round-1  p-3 py-2  profile-card mynav" id="nav-service">
                 <div class="d-flex justify-content-start align-items-center">
                     <div style="width: 40px" class=""><i class="fa-solid fa-hand-holding-heart"></i></div>
                     <div class="h6 mb-0 fw-">Services</div>
@@ -54,7 +63,7 @@ $name = $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['middlename'] .
             </div>
         </a>
         <a href="users.php" class="text-decoration-none text-white">
-            <div class=" round-1 p-3 py-2 profile-card mynav mb-2" id="nav-user">
+            <div class=" round-1 p-3 py-2 profile-card mynav " id="nav-user">
                 <div class="d-flex justify-content-start align-items-center">
                     <div style="width: 40px" class=""><i class="fa-solid fa-users"></i></div>
                     <div class="h6 mb-0 fw-">Users</div>

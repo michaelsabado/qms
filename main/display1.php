@@ -12,7 +12,7 @@ include '../database/dbconfig.php';
 
 <head>
     <?php include '../partials/_header.php' ?>
-    <title>Get Queue</title>
+    <title>Display</title>
     <style>
         body {
             overflow-y: hidden;
@@ -28,6 +28,7 @@ include '../database/dbconfig.php';
         }
 
         .slideShow {
+
             display: flex;
             justify-content: center;
             align-items: center;
@@ -47,6 +48,15 @@ include '../database/dbconfig.php';
         .slideShow video {
             width: calc(100%);
         }
+
+        .display-1 {
+            font-size: 7rem;
+        }
+
+        .br {
+            border-radius: 10px;
+
+        }
     </style>
 </head>
 
@@ -59,46 +69,69 @@ include '../database/dbconfig.php';
         </div>
 
     </div>
-    <audio src="../audio/call.mp3" class="d-none" id="callaudio" controls></audio>
+    <audio src="../audio/call3.mp3" class="d-none" id="callaudio" controls></audio>
     <button type="button" id="trigger-audio" class="d-none" onclick="document.getElementById('callaudio').play()">Play</button>
 
     <div class="d-flex ">
         <div class="vh-100 p-2 px-3" style="width: 50vw;">
-            <div class="d-flex align-items-center mb-3">
+            <!-- <div class="d-flex align-items-center mb-3">
                 <div class="me-3">
                     <img src="../images/psu.png" height="70" alt="">
                 </div>
                 <div class="display-3 fw-bold ">NOW SERVING</div>
-            </div>
+            </div> -->
 
 
-            <div class="card border-0 shadow-sm round-2" style="background-color: yellow; ">
-                <div class="card-body">
+            <div class="d-flex flex-column justify-content-between " style="height: calc(100vh - 20px)">
+                <div class="div d-flex align-items-center justify-content-around round-1 shadow" style=" background-color: yellow">
 
-                    <div class="row">
-                        <div class="col" style="border-right: 2px solid black;">
-                            <div class="text-center fw-bold" style="font-size: 40px">REGISTRAR</div>
-                            <div class="text-center fw-bold" style="font-size: 100px" id="c1-ns">-</div>
-                            <div class="text-center" style="font-size: 30px" id="c1-ident">-</div>
+                    <div class="display-2 fw-bold text-center w-100 h-100  py-3" style="border-right: 3px solid #333">WINDOW</div>
+                    <div class="display-2 fw-bold text-center w-100 h-100 py-3">SERVING</div>
+
+                </div>
+                <?php
+
+
+                $sql = "SELECT * FROM counter";
+
+                $res = $conn->query($sql);
+
+
+
+                if ($res->num_rows > 0) {
+                    while ($row = $res->fetch_assoc()) {
+
+                ?>
+
+                        <div class="div d-flex align-items-center justify-content-around" style="height: 100%; border: 4px solid transparent">
+
+                            <div class="w-100 h-100 bg-light d-flex align-items-center shadow-sm round-1 justify-content-center">
+                                <div class="display-1 fw-bold">
+                                    <?= $row['windowno'] ?></div>
+                            </div>
+
+
+                            <div class="w-100 h-100 bg-primary d-flex align-items-center justify-content-between br shadow round-1">
+
+
+                                <div class="display-2 fw-bold text-white text-center  tokens" id="c<?= $row['windowno'] ?>-ns" style="width: 60%">-
+                                </div>
+
+                                <div class="display-2 fw-bold p-1 tokens text-center" id="window<?= $row['windowno'] ?>" style="width: 40%; max-height: 100%; height: 100%; overflow-y: hidden; background-color: rgba(250,250,250,0.5)">
+                                </div>
+
+
+
+                            </div>
+
                         </div>
-                        <div class="col">
-                            <div class="text-center fw-bold" style="font-size: 40px">CASHIER</div>
-                            <div class="text-center fw-bold" style="font-size: 100px" id="c2-ns">-</div>
-                            <div class="text-center" style="font-size: 30px" id="c2-ident">-</div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="h2 mt-5 fw-bold text-center  mb-3"><i class="fas fa-angle-double-down me-5"></i>Next Token <i class="fas fa-angle-double-down ms-5"></i></div>
-            <div class="row">
-                <div class="col" id="counter1">
+                <?php
+                    }
+                }
 
 
-                </div>
-                <div class="col" id="counter2">
 
-                </div>
+                ?>
             </div>
 
 
@@ -106,10 +139,10 @@ include '../database/dbconfig.php';
 
         <div class="vh-100 p-3" id="right-panel" style="width: 50vw;">
             <div class="float-end">
-                <div class="h1 fw-bold text-uppercase"><i class="fas fa-calendar-day me-2"></i><?= date("F d, Y") ?>
+                <div class="display-5 fw-bold text-uppercase"><i class="fas fa-calendar-day me-2"></i><?= date("F d, Y") ?>
                 </div>
             </div>
-            <div class="h1 fw-bold mb-2" id="txt"></div>
+            <div class="display-5 fw-bold mb-2" id="txt"></div>
             <?php
             $uploads = $conn->query("SELECT * FROM uploads  WHERE isEnabled = 1 order by rand() ");
             $slides = array();
@@ -133,12 +166,14 @@ include '../database/dbconfig.php';
             function blink_text(e) {
 
 
-                for (var x = 0; x < 3; x++) {
+                for (var x = 0; x < 4; x++) {
                     e.fadeOut(500);
                     e.fadeIn(500);
                 }
 
             }
+
+
             $('document').ready(function() {
                 function speak(message) {
                     var msg = new SpeechSynthesisUtterance(message)
@@ -147,124 +182,110 @@ include '../database/dbconfig.php';
                     window.speechSynthesis.speak(msg)
                 }
                 setInterval(function() {
-                    $.post('ajax/checkCounter.php', {
-                        id: 2
-                    }, function(data) {
-
-                        var counter = JSON.parse(data);
-                        // console.log(counter);
-
-
-                        $.post('ajax/fetch-queue.php', function(data) {
-                            var queues = JSON.parse(data);
-
-                            $('#counter1').html('');
-                            $('#counter2').html('');
-                            $('#c1-ns').text('-');
-                            $('#c2-ns').text('-');
-                            $('#c1-ident').text('-');
-                            $('#c2-ident').text('-');
-                            var c1 = 0;
-                            var c2 = 0;
-
-                            var c_reg = JSON.parse(counter[1]);
-                            if (c_reg.status == 2) {
-
-                                $("#c1-ns").html("<div class='display-3 fw-bold text-danger mt-5'>CLOSED</div>");
-                                $("#c1-ident").text('');
-                            }
-                            var c_cash = JSON.parse(counter[0]);
-                            if (c_cash.status == 2) {
-
-                                $("#c2-ns").html("<div class='display-3 fw-bold text-danger mt-5'>CLOSED</div>");
-                                $("#c2-ident").text('');
-                            }
-                            for (var x = 0; x < queues.length; x++) {
-                                var queue = JSON.parse(queues[x]);
-                                // console.log(queue);
 
 
 
-                                if (queue.counterid == 2 && c_reg.status == 1) {
-                                    if ((c1 == 0 && queue.iscalled == 1) || queue.iscalled == 2) {
 
-                                        $("#c1-ns").text(queue.token);
-                                        $("#c1-ident").text(queue.identification);
-                                        c1++;
+                    $.post('ajax/checkCounter.php', function(data1) {
 
-                                        if (queue.iscalled == 1) {
-                                            // console.log(queue);
-                                            var message = queue.token.split('').join(' ');
-                                            $.post('ajax/called_queue.php', {
-                                                queueid: queue.queueid
-                                            }, function(data) {
 
-                                                document.getElementById("callaudio").pause();
-                                                document.getElementById("callaudio").currentTime = 0;
+                        var counter = JSON.parse(data1);
+                        console.log(counter);
 
-                                                // console.log(queue);
-                                                // console.log('Counter 2: ' + queue.queueid);
-                                                $("#trigger-audio").click();
-                                                setTimeout(function() {
-                                                    speak(message);
-                                                }, 3500)
+                        for (var y = 0; y < counter.length; y++) {
+                            if (counter[y].status == 1) {
+                                $('#window' + counter[y].windowno).text('');
+                                $("#c" + counter[y].windowno + "-ns").text("-");
+                                $.ajax({
+                                    type: "POST",
+                                    url: 'ajax/fetch-queue.php',
+                                    data: {
+                                        id: counter[y].counterid
+                                    },
+                                    async: false,
+                                    success: function(data) {
+                                        var queues = JSON.parse(data);
 
-                                                blink_text($("#c1-ns"));
-                                                blink_text($("#c1-ident"));
-                                            });
-                                        };
 
-                                    } else {
-                                        var element = `  <div class="card mb-3 bg-light shadow-sm border-0 round-1">
-            <div class="card-body">
-                <div class="h2 mb-0 fw-bold text-center">` + queue.token + `</div>
-            </div>
-        </div>`;
 
-                                        $('#counter1').append(element);
+
+                                        $("c" + counter[y].windowno + "-ns").text('-');
+                                        var c1 = 0;
+
+                                        console.log(queues);
+
+                                        for (var x = 0; x < queues.length; x++) {
+                                            var queue = JSON.parse(queues[x]);
+
+
+                                            if ((c1 == 0 && queue.iscalled == 1) || queue.iscalled == 2) {
+                                                console.log('Hello');
+                                                $("#c" + counter[y].windowno + "-ns").text(queue.token);
+                                                $("#c" + counter[y].windowno + "-ident").text(queue.identification);
+                                                c1++;
+
+                                                if (queue.iscalled == 1) {
+                                                    // console.log(queue);
+                                                    var message = queue.token.split('').join(' ');
+                                                    message += ", window " + counter[y].windowno;
+
+                                                    $.ajax({
+                                                        type: "POST",
+                                                        url: 'ajax/called_queue.php',
+                                                        data: {
+                                                            queueid: queue.queueid
+                                                        },
+                                                        async: false,
+                                                        success: function(data) {
+
+                                                            document.getElementById("callaudio").pause();
+                                                            document.getElementById("callaudio").currentTime = 0;
+
+                                                            // console.log(queue);
+                                                            // console.log('Counter 2: ' + queue.queueid);
+                                                            $("#trigger-audio").click();
+                                                            setTimeout(function() {
+                                                                speak(message);
+                                                            }, 2500)
+
+                                                            blink_text($("#c" + counter[y].windowno + "-ns"));
+                                                        }
+                                                    });
+
+
+
+                                                    $.post('ajax/called_queue.php', {
+                                                        queueid: queue.queueid
+                                                    }, function(data) {
+
+                                                        // blink_text($("#c" + counter[y].windowno + "-ident"));
+                                                    });
+                                                };
+
+                                            } else {
+                                                var element = `  <div class="card mb-2 bg-light shadow-sm border-0 round-1">
+                                                    <div class="card-body py-1">
+                                                        <div class="h2 mb-0 fw-bold text-center">` + queue.token + `</div>
+                                                    </div>
+                                                </div>`;
+
+                                                $('#window' + counter[y].windowno).append(element);
+                                            }
+
+
+
+
+                                        }
                                     }
+                                });
 
-                                } else if (queue.counterid == 1 && c_cash.status == 1) {
-
-                                    if ((c2 == 0 && queue.iscalled == 1) || queue.iscalled == 2) {
-                                        $("#c2-ns").text(queue.token);
-                                        $("#c2-ident").text(queue.identification);
-                                        c2++;
-
-                                        if (queue.iscalled == 1) {
-                                            var m = queue.token.split('').join(' ');
-                                            $.post('ajax/called_queue.php', {
-                                                queueid: queue.queueid
-                                            }, function(data) {
-                                                document.getElementById("callaudio").pause();
-                                                document.getElementById("callaudio").currentTime = 0;
-
-
-                                                // console.log('Counter 1: ' + m);
-                                                $("#trigger-audio").click();
-                                                setTimeout(function() {
-                                                    speak(m);
-                                                }, 3500)
-
-                                                blink_text($("#c2-ns"));
-                                                blink_text($("#c2-ident"));
-                                            });
-                                        };
-                                    } else {
-                                        var element = `  <div class="card mb-3 bg-light shadow-sm border-0 round-1">
-                                <div class="card-body">
-                                    <div class="h2 mb-0 fw-bold text-center">` + queue.token + `</div>
-                                </div>
-                            </div>`;
-
-                                        $('#counter2').append(element);
-                                    }
-
-                                }
-
-
+                            } else {
+                                $("#c" + counter[y].windowno + "-ns").html("<div class='display-5 fw-bold mt-2' style='color: rgba(250,250,250,0.6)'>CLOSED</div>");
+                                //     $("#c1-ident").text('');
                             }
-                        });
+                        }
+
+
 
                     });
                 }, 1000)

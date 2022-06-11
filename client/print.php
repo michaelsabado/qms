@@ -7,8 +7,30 @@ $id = $_GET['id'];
 
 $time = date('Y-m-d h:i:s');
 
-$result = $conn->query('SELECT * FROM queue a INNER JOIN service b ON a.serviceid = b.serviceid INNER JOIN counter c ON a.counterid = c.counterid WHERE a.queueid = ' . $id);
+$result = $conn->query('SELECT * FROM queue a INNER JOIN service b ON a.serviceid = b.serviceid INNER JOIN counter c ON a.counterid = c.counterid INNER JOIN service d ON a.serviceid = d.serviceid INNER JOIN major e ON a.majorid = e.majorid INNER JOIN program f on e.programid = f.programid WHERE a.queueid = ' . $id);
 $data  = $result->fetch_assoc();
+
+$type = '';
+switch ($data['category']) {
+    case 1:
+        $type = 'Request';
+        break;
+    case 2:
+        $type = 'Enrollment';
+        break;
+    case 3:
+        $type = 'Application';
+        break;
+    case 4:
+        $type = 'Claiming';
+        break;
+    case 5:
+        $type = 'Submission';
+        break;
+    case 6:
+        $type = 'Query & Others';
+        break;
+}
 function check_input($data)
 {
     $data = trim($data);
@@ -51,10 +73,13 @@ function check_input($data)
 
 <body>
     <div class="text-center mb-4">
-        <div class="h6"><?= $data['identification'] ?></div>
+        <div class="h6 text-wrap"><?= $data['identification'] ?></div>
         <div class="display-1 fw-bold"><?= $data['token'] ?></div>
-        <div class="h5  fst-italic fw-bold smalltxt">Please proceed to <?= $data['countername'] ?></div>
-        <div class="h6 smalltxt "><?= $data['description'] ?></div>
+        <div class="h5  fst-italic fw-bold smalltxt mb-2">Please wait in Window <?= $data['windowno'] ?></div>
+        <hr>
+        <div class="h6 smalltxt mb-0"><?= $data['programdescription'] ?></div>
+        <div class="h6 smalltxt1 mb-2"> <?= ($data['majordescription'] != 'n/a') ? "Major in " . $data['majordescription'] : "" ?></div>
+        <div class="h6 smalltxt "><?= $type . ' | ' . $data['description'] ?></div>
         <div class="smalltxt fst-italic">
             <?= $time ?>
         </div>

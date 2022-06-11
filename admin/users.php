@@ -69,14 +69,14 @@ function check_input($data)
                                         <th>Fullname</th>
                                         <th>Username</th>
                                         <th>Usertype</th>
-                                        <th>Assigned Counter</th>
+                                        <th>Assigned Window</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
 
-                                    $res = $conn->query("SELECT * FROM user a LEFT JOIN counter b ON a.counterid = b.counterid");
+                                    $res = $conn->query("SELECT * FROM user a INNER JOIN counter b ON a.counterid = b.counterid");
 
                                     if ($res->num_rows > 0) {
                                         $count = 1;
@@ -88,8 +88,9 @@ function check_input($data)
                                         <td>' . $row['firstname'] . ' ' . $row['middlename'] . ' ' . $row['lastname'] . '</td>
                                         <td>' . $row['username'] . '</td>
                                         <td>' . $usertype . '</td>
-                                        <td>' . $row['countername'] . '</td>
-                                        <td><i class="fa-solid fa-pen-to-square me-3 text-primary"></i><i class="fa-solid fa-trash-can text-danger pointer" onclick="deleteMe(' . $row['userid'] . ')"></i></td>
+                                        <td>Window ' . $row['windowno'] . '</td>
+                                        <td><i class="fa-solid fa-pen-to-square me-3 text-primary"></i><i class="fa-solid fa-trash-can text-danger pointer" onclick="deleteMe(' . $row['userid'] . ')"></i>
+                                        <a href="access.php?id=' . $row['userid'] . '" class="text-decoration-none ms-3" >View Access</a></td>
                                     </tr>';
 
                                             $count++;
@@ -128,7 +129,7 @@ function check_input($data)
                                 <input type="text" class="form-control round-1 mb-3" name="lastname" placeholder="Cruz" required>
                                 <div class="h6">Username</div>
                                 <input type="text" class="form-control round-1 mb-3" name="username" placeholder="Cruz" required>
-                                <div class="h6">Counter Assignment</div>
+                                <div class="h6">Window Assignment</div>
                                 <select name="counter" id="" class="form-select round-1" required>
                                     <?php
 
@@ -136,7 +137,7 @@ function check_input($data)
 
                                     if ($res->num_rows > 0) {
                                         while ($row = $res->fetch_assoc()) {
-                                            echo '<option value="' . $row['counterid'] . '">' . $row['countername'] . '</option>';
+                                            echo '<option value="' . $row['counterid'] . '">Window ' . $row['windowno'] . '</option>';
                                         }
                                     }
 

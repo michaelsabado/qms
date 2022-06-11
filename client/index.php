@@ -40,30 +40,64 @@ include '../database/dbconfig.php';
 <body>
     <div class="d-flex ">
         <div class="vh-100  d-flex align-items-center flex-column justify-content-center" style="width: 40vw;">
-            <div class="mb-3"><img src="../images/psu.png" height="150" alt=""></div>
-            <div class="h1 fw-bold">Welcome to PSU!</div>
-            <div class="h4 fw-">School of Advanced Studies</div>
+            <div class="d-flex align-items-center">
+                <div class="mb-3 me-4"><img src="../images/psu.png" height="100" alt=""></div>
+                <div class="text-start">
+                    <div class="h1 fw-bold">Welcome to PSU!</div>
+                    <div class="h4 fw-">School of Advanced Studies</div>
+                </div>
+
+            </div>
+
             <div class="card border-0 w-100">
                 <div class="card-body p-5">
                     <form action="" method="post" id="queue-form">
                         <div class="h6 fw-bold">1. Name / School ID</div>
-                        <input type="text" name="identification" class="form-control form-control-lg mb-4 round-1" placeholder="Enter here" value="" required>
-                        <div class="h6 fw-bold">2. Select Counter</div>
-                        <div class="d-flex justify-content-stretch mb-4">
+                        <input type="text" name="identification" class="form-control form-control-lg mb-4 round-1" placeholder="Start here" value="" required>
+                        <div class="h6 fw-bold">2. Select Program</div>
+                        <!-- <div class="d-flex justify-content-stretch mb-4">
                             <div class="card text-center p-3 w-100 me-3 fw-bold mybtn round-1 shadow-sm" onclick="selectCounter($(this),2)">
                                 Registrar
                             </div>
                             <div class="card text-center p-3 w-100 fw-bold mybtn round-1 shadow-sm" onclick="selectCounter($(this),1)">
                                 Cashier
                             </div>
-                        </div>
-                        <input type="hidden" name="counterid" id="counter-input">
-                        <div class="h6 fw-bold">3. Select Purpose</div>
-                        <select name="serviceid" id="services" class="form-select form-select-lg mb-5 round-1" required>
+                        </div> -->
+                        <select name="program" id="programs" class="form-select form-select-lg mb-4 round-1" required onchange="fetchMajor($(this).val())">
                             <option value="">- - -</option>
+                            <?php
+
+                            $sql = "SELECT * FROM program";
+                            $res = $conn->query($sql);
+                            if ($res->num_rows > 0) {
+                                while ($row = $res->fetch_assoc()) {
+                                    echo '<option value="' . $row['programid'] . '">' . $row['programdescription'] . '</option>';
+                                }
+                            }
+                            ?>
+
+                        </select>
+                        <div class="h6 fw-bold">3. Select Major</div>
+
+                        <select name="major" id="majors" class="form-select form-select-lg mb-4 round-1" required>
+
+
                         </select>
 
-                        <button type="submit" class="btn btn-lg w-100 btn-primary round-1 shadow" href="generate-number.php">4. Generate Number <i class="fas fa-angle-double-right"></i></button>
+                        <div class="h6 fw-bold">4. Select Service</div>
+                        <select class="form-select form-select-lg mb-2 round-1" required onchange="fetchServices($(this).val())">
+                            <option value="">- - -</option>
+                            <option value="1">Request</option>
+                            <option value="2">Enrollment</option>
+                            <option value="3">Application</option>
+                            <option value="4">Claiming</option>
+                            <option value="5">Submission</option>
+                            <option value="6">Query & Others</option>
+                        </select>
+                        <select id="services" name="service" class="form-select form-select-lg mb-5 round-1" required>
+
+                        </select>
+                        <button type="submit" class="btn btn-lg w-100 btn-primary round-1 shadow" href="generate-number.php">5. Generate Number <i class="fas fa-angle-double-right"></i></button>
                     </form>
                 </div>
             </div>
@@ -95,31 +129,47 @@ include '../database/dbconfig.php';
                 e.preventDefault();
 
                 $.post('generate-number.php', $("#queue-form").serialize(), function(data) {
-                    $("#queue-form")[0].reset();
-                    $(".mybtn").removeClass('text-white bg-success');
-                    $("#services").load('get-service.php', {
-                        id: 0
-                    })
-                    var strWindowFeatures = "location=yes,scrollbars=no,status=yes";
-                    var URL = "print.php?id=" + data;
-                    // var win = window.open(URL, "_blank", strWindowFeatures);
+                    alert(data);
+                    if (data == 102) {
+                        alert("Service unavailable. Sorry for the inconvenience.");
+                        $("#queue-form").reset();
+                    } else {
+                        $("#queue-form")[0].reset();
+                        $(".mybtn").removeClass('text-white bg-success');
 
-                    window.location.href = URL;
+                        var strWindowFeatures = "location=yes,scrollbars=no,status=yes";
+                        var URL = "print.php?id=" + data;
+                        // var win = window.open(URL, "_blank", strWindowFeatures);
+
+                        window.location.href = URL;
+                    }
+
 
                 });
             });
 
 
-            function selectCounter(e, id) {
-                $(".mybtn").removeClass('text-white bg-success');
-                e.addClass('text-white bg-success');
-                $("#counter-input").val(id);
+            function fetchServices(id) {
+
                 $("#services").load('get-service.php', {
                     id
                 }, function(data) {
                     // alert(data);
                 })
             }
+
+            function fetchMajor(id) {
+                // alert(id);
+                $("#majors").load('get-major.php', {
+                    id
+                }, function(data) {
+                    // alert(data);
+                })
+
+            }
+
+
+
 
             function initialize() {
                 startTime();

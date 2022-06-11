@@ -19,7 +19,7 @@ $counter_id = $_SESSION['user']['counterid'];
             </div>
             <div>
                 <div class="h6  fw-bold mb-0"><?= $name ?></div>
-                <div class="smalltxt mb-0"><?= $_SESSION['user']['countername'] ?> | Staff</div>
+                <div class="smalltxt mb-0">Window <?= $_SESSION['user']['windowno'] ?> | Staff</div>
             </div>
         </div>
         <hr>

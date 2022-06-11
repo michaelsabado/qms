@@ -3,8 +3,9 @@ include '../../database/dbconfig.php';
 
 
 $date = date("Y-m-d");
+$id = $_POST['id'];
 
-$sql = "SELECT * FROM `queue` WHERE date_created LIKE '$date%' AND `status` = 1";
+$sql = "SELECT * FROM `queue` WHERE date_created LIKE '$date%' AND `status` = 1 AND counterid = $id";
 $result = $conn->query($sql);
 
 

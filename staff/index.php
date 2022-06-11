@@ -12,7 +12,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
 
 <head>
     <?php include '../partials/_header.php' ?>
-    <title><?= $_SESSION['user']['countername'] ?> Counter</title>
+    <title>Window <?= $_SESSION['user']['windowno'] ?></title>
     <style>
         .cb {
             border: 3px solid white;

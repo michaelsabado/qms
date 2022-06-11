@@ -12,7 +12,7 @@ $message = '';
 if (isset($_POST['submit'])) {
 
     $countername = check_input($_POST['countername']);
-    $conn->query("INSERT INTO `counter` VALUES(null, '$countername', 2 )");
+    $conn->query("INSERT INTO `counter` VALUES(null, '', '$countername', 2, 1 )");
     $message = '<div class="alert alert-warning alert-dismissible fade show round-1" role="alert">
     <strong>Success!</strong> ' . $countername . ' is added as counter.
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -32,7 +32,7 @@ function check_input($data)
 
 <head>
     <?php include '../partials/_header.php' ?>
-    <title>QMS | Counters</title>
+    <title>QMS | Windowws</title>
 
 </head>
 
@@ -46,16 +46,16 @@ function check_input($data)
             <?php include '../partials/_admin_nav.php' ?>
 
             <div class="content p-5">
-                <div class="h4 fw-  mb-4"><i class="fa-solid fa-window-restore me-3 "></i>Manage Counters</div>
+                <div class="h4 fw-  mb-4"><i class="fa-solid fa-window-restore me-3 "></i>Manage Windowws</div>
 
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card round-2 shadow-sm border-0">
                             <div class="card-body p-4">
-                                <div class="h6 fw-bold">Add Counter</div>
+                                <div class="h6 fw-bold">Add Window</div>
                                 <hr>
                                 <form action="" method="post">
-                                    <input type="text" name="countername" class="form-control form-control round-1 mb-3" placeholder="Counter Name" required>
+                                    <input type="number" name="countername" class="form-control form-control round-1 mb-3" placeholder="Window #" required>
                                     <button type="submit" name="submit" class="float-end btn btn-primary px-3 shadow round-1">Add <i class="fa-solid fa-angles-right ms-2"></i></button>
                                 </form>
                                 <?= $message ?>
@@ -65,9 +65,9 @@ function check_input($data)
                     <div class="col-md-6">
                         <div class="card round-2 shadow-sm border-0">
                             <div class="card-body p-4">
-                                <div class="h6 fst-italic">Displaying all counters.</div>
+                                <div class="h6 fst-italic">Displaying all windows.</div>
                                 <hr>
-                                <div class="mt-4">
+                                <div class="mt-4 " style="height: calc(100vh - 300px); overflow-y:auto">
 
                                     <?php
                                     $res = $conn->query("SELECT * FROM counter");
@@ -92,7 +92,7 @@ function check_input($data)
                                                     </div>
                                                     <div>
                                                         <div class="h5 mb-0 fw-bold">
-                                                            ' . $row['countername'] . '
+                                                            Window ' . $row['windowno'] . '
                                                         </div>
                                                         <div class="smalltxt">Status: ' . $status . '</div>
                                                     </div>
@@ -148,7 +148,7 @@ function check_input($data)
                                     Swal.fire({
                                         position: 'top-end',
                                         icon: 'success',
-                                        title: 'Counter Deleted',
+                                        title: 'Window Deleted',
                                         showConfirmButton: false,
                                         timer: 1500
                                     })
