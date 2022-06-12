@@ -129,7 +129,7 @@ include '../database/dbconfig.php';
                 e.preventDefault();
 
                 $.post('generate-number.php', $("#queue-form").serialize(), function(data) {
-                    alert(data);
+                    // alert(data);
                     if (data == 102) {
                         alert("Service unavailable. Sorry for the inconvenience.");
                         $("#queue-form").reset();

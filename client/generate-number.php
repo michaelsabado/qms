@@ -12,6 +12,22 @@ $serviceid = check_input($_POST['service']);
 
 $time = date('Y-m-d h:i:s');
 $token = date('is');
+$today = date('Y-m-d');
+
+
+$sql = "SELECT * FROM token WHERE date = '$today'";
+$res = $conn->query($sql);
+
+if ($res->num_rows > 0) {
+    $t = $res->fetch_assoc();
+    $token = $t['token'] + 1;
+    $sql = "UPDATE  token set token = '$token' WHERE `date` = '$today'";
+    $conn->query($sql);
+} else {
+    $sql = "INSERT INTO token VALUES(null, '$today', '1001')";
+    $conn->query($sql);
+    $token = 1001;
+}
 
 
 $sql = "SELECT b.counterid FROM access a INNER JOIN user b on a.userid = b.userid WHERE a.majorid = $major";

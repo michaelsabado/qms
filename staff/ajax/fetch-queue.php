@@ -5,7 +5,7 @@ include '../../database/dbconfig.php';
 $date = date("Y-m-d");
 $counterid = $_SESSION['user']['counterid'];
 
-$sql = "SELECT * FROM `queue` a INNER JOIN `service` b ON a.serviceid = b.serviceid WHERE a.counterid = $counterid AND a.date_created LIKE '$date%' ORDER BY queueid";
+$sql = "SELECT * FROM `queue` a INNER JOIN `service` b ON a.serviceid = b.serviceid INNER JOIN major c on a.majorid = c.majorid INNER JOIN program d ON c.programid = d.programid WHERE a.counterid = $counterid AND a.date_created LIKE '$date%' ORDER BY queueid";
 $result = $conn->query($sql);
 
 

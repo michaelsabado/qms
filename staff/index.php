@@ -47,8 +47,18 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
                                 </div>
-                                <div class="h6"><b>Client</b>: <span id="c1-ident">-</span></div>
-                                <div class="h6"><b>Service</b>: <span id="c1-service">-</span></div>
+                                <div class="d-flex justify-content-between">
+                                    <div class="w-100">
+                                        <div class="h6"><b>Client</b>: <span id="c1-ident">-</span></div>
+                                        <div class="h6"><b>Program</b>: <span id="c1-program">-</span></div>
+                                        <div class="h6"><b>Major</b>: <span id="c1-major">-</span></div>
+                                    </div>
+                                    <div class="w-100">
+                                        <div class="h6"><b>Purpose</b>: <span id="c1-type">-</span></div>
+                                        <div class="h6"><b>Selected Service</b>: <span id="c1-service">-</span></div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                         <div class="card round-2 shadow-sm border-0">
@@ -310,7 +320,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                             counterid: counter,
                             currenttoken: currenttoken_data,
                             nexttoken: nexttoken,
-                            maojorid: majorid
+                            majorid: majorid
                         }, function(data) {
                             alert(data)
 
@@ -347,6 +357,9 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                         $('#c1-ns').text('-');
                         $('#c1-ident').text('-');
                         $('#c1-service').text('-');
+                        $('#c1-type').text('');
+                        $('#c1-program').text('');
+                        $('#c1-major').text('');
                         var c1 = 0;
                         var c2 = 0;
                         pending = 0;
@@ -369,6 +382,33 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                     $("#c1-ns").text(queue.token);
                                     $("#c1-ident").text(queue.identification);
                                     $('#c1-service').text(queue.description);
+
+                                    $('#c1-major').text(queue.majordescription);
+                                    var type = '';
+
+                                    switch (queue.category) {
+                                        case '1':
+                                            type = 'Request';
+                                            break;
+                                        case '2':
+                                            type = 'Enrollment';
+                                            break;
+                                        case '3':
+                                            type = 'Application';
+                                            break;
+                                        case '4':
+                                            type = 'Claiming';
+                                            break;
+                                        case '5':
+                                            type = 'Submission';
+                                            break;
+                                        case '6':
+                                            type = 'Query & Others';
+                                            break;
+                                    }
+
+                                    $('#c1-type').text(type);
+                                    $('#c1-program').text(queue.programdescription);
                                     currenttoken = queue.queueid;
                                     currenttoken_data = queue;
                                     majorid = queue.majorid
