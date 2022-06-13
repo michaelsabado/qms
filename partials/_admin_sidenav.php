@@ -38,7 +38,7 @@ $name = $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['middlename'] .
         <a href="programs.php" class="text-decoration-none text-white">
             <div class=" round-1  p-3 py-2 profile-card mynav " id="nav-programs">
                 <div class="d-flex justify-content-start align-items-center">
-                    <div style="width: 40px" class=""><i class="fa-solid fa-window-restore"></i></div>
+                    <div style="width: 40px" class=""><i class="fas fa-graduation-cap"></i></div>
                     <div class="h6 mb-0 fw-">Programs</div>
                 </div>
 

@@ -15,7 +15,7 @@ $date = (isset($_GET['date']) && $_GET['date'] != "") ? $_GET['date'] : date('Y-
 
 <head>
     <?php include '../partials/_header.php' ?>
-    <title>Counter</title>
+    <title>Window <?= $_SESSION['user']['windowno'] ?></title>
 
 </head>
 
@@ -36,12 +36,15 @@ $date = (isset($_GET['date']) && $_GET['date'] != "") ? $_GET['date'] : date('Y-
                     <div class="card round-2 border-0 shadow-sm  mb-3">
                         <div class="card-body p-4">
                             <div style="max-width: 300px">
-                                <div class="h6 fw-bold">Generate Report</div>
+                                <div class="h6 fw-bold">Fetch Record</div>
                                 <div class="smalltxt">Select date</div>
                                 <form action="" method="get">
-                                    <input type="date" name="date" class="form-control round-1 mb-3" value="<?= $date ?>">
-                                    <button type=submit class="btn btn-primary round-1 shadow-sm">Fetch <i class="fa-solid fa-download ms-2"></i></button>
+                                    <input type="date" name="date" id="sel-date" class="form-control round-1 mb-3" value="<?= $date ?>">
+                                    <button type=submit class="btn btn-primary round-1 shadow-sm me-2">Fetch <i class="fa-solid fa-download ms-2"></i></button>
+
+                                    <button type="button" class="btn btn-success round-1 shadow-sm" onclick="printMe()">Create PDF <i class="fas fa-print ms-2"></i></button>
                                 </form>
+
                             </div>
 
                         </div>
@@ -55,9 +58,9 @@ $date = (isset($_GET['date']) && $_GET['date'] != "") ? $_GET['date'] : date('Y-
 
 
                             if ($counter == 'All') {
-                                $res = $conn->query("SELECT * FROM `queue` a INNER JOIN `service` b on a.serviceid = b.serviceid WHERE a.date_created LIKE '$date%' AND a.status != 1");
+                                $res = $conn->query("SELECT * FROM `queue` a INNER JOIN `service` b on a.serviceid = b.serviceid  INNER JOIN major c ON a.majorid = c.majorid INNER JOIN program d ON c.programid = d.programid WHERE a.date_created LIKE '$date%' AND a.status != 1");
                             } else {
-                                $res = $conn->query("SELECT * FROM `queue` a INNER JOIN `service` b on a.serviceid = b.serviceid WHERE a.date_created LIKE '$date%' AND a.status != 1 AND a.counterid = $counter");
+                                $res = $conn->query("SELECT * FROM `queue` a INNER JOIN `service` b on a.serviceid = b.serviceid INNER JOIN major c ON a.majorid = c.majorid INNER JOIN program d ON c.programid = d.programid WHERE a.date_created LIKE '$date%' AND a.status != 1 AND a.counterid = $counter");
                             }
 
 
@@ -99,7 +102,9 @@ $date = (isset($_GET['date']) && $_GET['date'] != "") ? $_GET['date'] : date('Y-
                                         <tr>
                                             <th>ID</th>
                                             <th>Identification</th>
-                                            <th>Service</th>
+                                            <th>Program</th>
+                                            <th>Purpose</th>
+
                                             <th>Token</th>
                                             <th>Status</th>
                                             <th>Timestamp</th>
@@ -127,17 +132,39 @@ $date = (isset($_GET['date']) && $_GET['date'] != "") ? $_GET['date'] : date('Y-
                                                     $voided++;
                                                     $stats = "Voided";
                                                 }
+                                                $type = '';
+                                                switch ($row['category']) {
+                                                    case '1':
+                                                        $type = 'Request';
+                                                        break;
+                                                    case '2':
+                                                        $type = 'Enrollment';
+                                                        break;
+                                                    case '3':
+                                                        $type = 'Application';
+                                                        break;
+                                                    case '4':
+                                                        $type = 'Claiming';
+                                                        break;
+                                                    case '5':
+                                                        $type = 'Submission';
+                                                        break;
+                                                    case '6':
+                                                        $type = 'Query & Others';
+                                                        break;
+                                                }
 
-
-
-                                                echo '<tr>
-                        <td>' . $count . '</td>
-                        <td>' . $row['identification'] . '</td>
-                        <td class="text-nowrap">' . $row['description'] . '</td>
-                        <td>' . $row['token'] . '</td>
-                        <td>' . $stats . '</td>
-                        <td>' . $row['date_created'] . '</td>
-                    </tr>';
+                                                echo '<tr valign="middle">
+                                                    <td>' . $count . '</td>
+                                                    <td>' . $row['identification'] . '</td>
+                                                    <td>' . $row['programdescription'] . '<br>
+                                                    <span class="text-nowrap smalltxt">' . $row['majordescription'] . '</span</td>
+                                                    <td>' . $type . '<br>
+                                                    <span class="text-nowrap smalltxt">' . $row['description'] . '</span</td>
+                                                    <td>' . $row['token'] . '</td>
+                                                    <td>' . $stats . '</td>
+                                                    <td>' . $row['date_created'] . '</td>
+                                                </tr>';
                                                 $count++;
                                             }
                                         }
@@ -165,6 +192,14 @@ $date = (isset($_GET['date']) && $_GET['date'] != "") ? $_GET['date'] : date('Y-
         <?php include '../partials/_admin_footer.php' ?>
 
         <script>
+            function printMe() {
+                window.location.href = "print.php?date=" + $("#sel-date").val();
+
+
+
+            }
+
+
             $(document).ready(function() {
                 $('#example').DataTable();
             });

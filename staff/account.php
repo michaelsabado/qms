@@ -45,7 +45,7 @@ $user = $conn->query($sql)->fetch_assoc();
 
 <head>
     <?php include '../partials/_header.php' ?>
-    <title>Counter</title>
+    <title>Window <?= $_SESSION['user']['windowno'] ?></title>
 
 </head>
 

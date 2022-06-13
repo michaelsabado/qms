@@ -25,6 +25,21 @@ if (isset($_POST['submit'])) {
   </div>';
 }
 
+if (isset($_POST['submit1'])) {
+    $id = $_POST['id'];
+    $firstname = check_input($_POST['firstname']);
+    $middlename = check_input($_POST['middlename']);
+    $lastname = check_input($_POST['lastname']);
+    $username = check_input($_POST['username']);
+    $counter = check_input($_POST['counter']);
+
+
+    $conn->query("UPDATE `user` SET firstname = '$firstname', middlename = '$middlename', lastname = '$lastname', username = '$username', counterid = $counter WHERE userid = $id");
+    $message = '<div class="alert alert-warning alert-dismissible fade show round-1" role="alert">
+    <strong>Success!</strong> ' . $firstname . '\'s info is now updated.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>';
+}
 function check_input($data)
 {
     $data = trim($data);
@@ -89,7 +104,7 @@ function check_input($data)
                                         <td>' . $row['username'] . '</td>
                                         <td>' . $usertype . '</td>
                                         <td>Window ' . $row['windowno'] . '</td>
-                                        <td><i class="fa-solid fa-pen-to-square me-3 text-primary"></i><i class="fa-solid fa-trash-can text-danger pointer" onclick="deleteMe(' . $row['userid'] . ')"></i>
+                                        <td><i class="fa-solid fa-pen-to-square me-3 text-primary pointer" data-bs-toggle="modal" data-bs-target="#exampleModal1" onclick="initEdit(' . $row['userid'] . ',\'' . $row['firstname'] . '\', \'' . $row['middlename'] . '\', \'' . $row['lastname'] . '\', \'' . $row['username'] . '\', ' . $row['counterid'] . ')"></i><i class="fa-solid fa-trash-can text-danger pointer" onclick="deleteMe(' . $row['userid'] . ')"></i>
                                         <a href="access.php?id=' . $row['userid'] . '" class="text-decoration-none ms-3" >View Access</a></td>
                                     </tr>';
 
@@ -153,6 +168,50 @@ function check_input($data)
                     </div>
                 </div>
             </div>
+
+
+            <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content round-1 border-0">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post" id="editForm">
+                                <input type="hidden" name="id" id="id">
+                                <div class="h6">Firstname</div>
+                                <input type="text" class="form-control round-1 mb-3" name="firstname" id="firstname_u" placeholder="Juan" required>
+                                <div class="h6">Middlename</div>
+                                <input type="text" class="form-control round-1 mb-3" name="middlename" id="middlename_u" placeholder="Dela">
+                                <div class="h6">Lastname</div>
+                                <input type="text" class="form-control round-1 mb-3" name="lastname" id="lastname_u" placeholder="Cruz" required>
+                                <div class="h6">Username</div>
+                                <input type="text" class="form-control round-1 mb-3" name="username" id="username_u" placeholder="Cruz" required>
+                                <div class="h6">Window Assignment</div>
+                                <select name="counter" id="counter_u" class="form-select round-1" required>
+                                    <?php
+
+                                    $res = $conn->query("SELECT * FROM counter");
+
+                                    if ($res->num_rows > 0) {
+                                        while ($row = $res->fetch_assoc()) {
+                                            echo '<option value="' . $row['counterid'] . '">Window ' . $row['windowno'] . '</option>';
+                                        }
+                                    }
+
+                                    ?>
+                                </select>
+                            </form>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" name="submit1" form="editForm" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <?php include '../partials/_admin_footer.php' ?>
 
             <script>
@@ -161,6 +220,15 @@ function check_input($data)
                 });
                 $("#nav-user").addClass('mynav-active');
 
+
+                function initEdit(id, fn, mn, ln, un, w) {
+                    $("#id").val(id);
+                    $("#firstname_u").val(fn);
+                    $("#middlename_u").val(mn);
+                    $("#lastname_u").val(ln);
+                    $("#username_u").val(un);
+                    $("#counter_u").val(w);
+                }
 
                 function deleteMe(id) {
                     Swal.fire({

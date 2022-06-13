@@ -36,7 +36,17 @@ if (isset($_POST['submit'])) {
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>';
 }
+if (isset($_POST['submit1'])) {
+    $id = $_POST['id'];
+    $description = check_input($_POST['description']);
 
+
+    $conn->query("UPDATE `major` SET majordescription = '$description' WHERE majorid = $id");
+    $message = '<div class="alert alert-warning alert-dismissible fade show round-1" role="alert">
+    <strong>Success!</strong> ' . $description . ' is now set.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>';
+}
 function check_input($data)
 {
     $data = trim($data);
@@ -66,7 +76,7 @@ function check_input($data)
 
             <div class="content p-5">
                 <div class="d-flex mb-4 justify-content-between align-items-center">
-                    <div class="h4 fw- "><i class="fa-solid fa-hand-holding-heart me-3"></i><a href="programs.php" class="text-decoration-none">Manage Programs</a> > <?= $programdata['programdescription'] ?></div>
+                    <div class="h4 fw- "><i class="fas fa-graduation-cap me-3"></i><a href="programs.php" class="text-decoration-none">Manage Programs</a> > <?= $programdata['programdescription'] ?></div>
                     <div><button class="btn btn-primary round-1 shadow-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Add major <i class="fa-solid fa-circle-plus ms-2"></i></button></div>
                 </div>
 
@@ -98,7 +108,7 @@ function check_input($data)
                                             echo '  <tr id="major' . $row['majorid'] . '">
                                             <td>' . ++$count . '</td>
                                             <td>' . $row['majordescription'] . '</td>
-                                        <td><i class="fa-solid fa-pen-to-square me-3 text-primary"></i><i class="fa-solid fa-trash-can text-danger pointer " onclick="deleteMe(' . $row['majorid'] . ')"></i>
+                                        <td><i class="fa-solid fa-pen-to-square me-3 text-primary pointer" data-bs-toggle="modal" data-bs-target="#exampleModal1" onclick="initEdit(' . $row['majorid'] . ',\'' . $row['majordescription'] . '\')"></i><i class="fa-solid fa-trash-can text-danger pointer " onclick="deleteMe(' . $row['majorid'] . ')"></i>
                                       
                                         </td>
 
@@ -152,7 +162,29 @@ function check_input($data)
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content round-1 border-0">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit major</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post" id="editForm">
+                                <input type="hidden" name="id" id="id">
 
+                                <div class="h6">Description</div>
+                                <input type="text" class="form-control round-1 mb-3" name="description" id="description_u" placeholder="" required>
+                            </form>
+
+                        </div>
+                        <div class="modal-footer ">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" name="submit1" form="editForm" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <?php include '../partials/_admin_footer.php' ?>
 
             <script>
@@ -161,6 +193,14 @@ function check_input($data)
                 });
 
                 $("#nav-programs").addClass('mynav-active');
+
+
+                function initEdit(id, pd) {
+                    $("#description_u").val(pd);
+                    $("#id").val(id);
+
+                    // alert($("#editForm").serialize());
+                }
 
                 function deleteMe(id) {
                     Swal.fire({

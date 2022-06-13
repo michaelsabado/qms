@@ -21,6 +21,17 @@ if (isset($_POST['submit'])) {
   </div>';
 }
 
+if (isset($_POST['submit1'])) {
+    $id = $_POST['id'];
+    $description = check_input($_POST['description']);
+    $category = $_POST['category'];
+
+    $conn->query("UPDATE service SET category = $category, description = '$description' WHERE serviceid = $id");
+    $message = '<div class="alert alert-warning alert-dismissible fade show round-1" role="alert">
+    <strong>Success!</strong> ' . $description . ' is now set.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>';
+}
 function check_input($data)
 {
     $data = trim($data);
@@ -63,6 +74,7 @@ function check_input($data)
                             <table id="example" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Type</th>
                                         <th>Service</th>
 
@@ -72,9 +84,10 @@ function check_input($data)
                                 <tbody>
                                     <?php
 
-                                    $res = $conn->query("SELECT * FROM service");
+                                    $res = $conn->query("SELECT * FROM service ORDER BY category");
 
                                     if ($res->num_rows > 0) {
+                                        $count = 0;
                                         while ($row = $res->fetch_assoc()) {
 
                                             $type = '';
@@ -102,9 +115,10 @@ function check_input($data)
 
 
                                             echo '  <tr id="service' . $row['serviceid'] . '">
+                                            <td>' . ++$count . '</td>
                                             <td>' . $type . '</td>
                                             <td>' . $row['description'] . '</td>
-                                        <td><i class="fa-solid fa-pen-to-square me-3 text-primary"></i><i class="fa-solid fa-trash-can text-danger pointer " onclick="deleteMe(' . $row['serviceid'] . ')"></i></td>
+                                        <td><i class="fa-solid fa-pen-to-square me-3 text-primary pointer" data-bs-toggle="modal" data-bs-target="#exampleModal1" onclick="initEdit(' . $row['serviceid'] . ',' . $row['category'] . ',\'' . $row['description'] . '\')"></i><i class="fa-solid fa-trash-can text-danger pointer " onclick="deleteMe(' . $row['serviceid'] . ')"></i></td>
     
                                     </tr>';
                                         }
@@ -165,6 +179,38 @@ function check_input($data)
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content round-1 border-0">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Service</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="" method="post" id="editForm">
+                                <input type="hidden" name="id" id="id">
+                                <div class="h6">Type</div>
+                                <select name="category" id="category_u" class="form-select mb-3 round-1" required>
+
+                                    <option value="1">Requests</option>
+                                    <option value="2">Enrollment</option>
+                                    <option value="3">Application</option>
+                                    <option value="4">Claiming</option>
+                                    <option value="5">Submission</option>
+                                    <option value="6">Query & Others</option>
+                                </select>
+                                <div class="h6">Service</div>
+                                <input type="text" class="form-control round-1 mb-3" name="description" id="description_u" placeholder="" required>
+                            </form>
+
+                        </div>
+                        <div class="modal-footer ">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" name="submit1" form="editForm" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <?php include '../partials/_admin_footer.php' ?>
 
@@ -174,6 +220,16 @@ function check_input($data)
                 });
 
                 $("#nav-service").addClass('mynav-active');
+
+
+
+                function initEdit(id, cat, desc) {
+                    $("#description_u").val(desc);
+                    $("#category_u").val(cat);
+                    $("#id").val(id);
+
+                    // alert($("#editForm").serialize());
+                }
 
                 function deleteMe(id) {
                     Swal.fire({

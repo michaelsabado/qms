@@ -41,6 +41,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                     <div class="col-md-8">
                         <div class="card round-2 shadow-sm  mb-3" style="   border: 3px solid rgb(13, 110, 253);">
                             <div class="card-body p-4">
+                                <button class="float-end btn btn-light shadow-sm border  round-1" onclick="breakQueue()"><i class="fas fa-stopwatch"></i> Break Queue</button>
                                 <div class="h5 fw-bold text-primary">Now Serving</div>
                                 <div class="text- fw- mb-0" style="font-size: 80px;" id="c1-ns">
                                     <div class="spinner-grow text-primary" role="status">
@@ -66,7 +67,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                 <div class="h6 fw-bold text-primary mb-4">Controls</div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="card p-2 align-items-center shadow text-center bg-primary mb-3 round-1 pointer cb" data-bs-toggle="offcanvas" id="open-canvass" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                        <div class="card p-2 align-items-center shadow text-center bg-primary mb-3 round-1 pointer cb" data-bs-toggle="offcanvas" id="open-canvass" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" onclick="fetchCounter()">
                                             <div class="h5 text-white mb-0">Transfer <i class="fas fa-exchange-alt"></i></div>
                                             <div class="smalltxt text-white">(Shift + T)</div>
                                         </div>
@@ -141,41 +142,8 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                     <h5 id="offcanvasRightLabel">Transfer token</h5>
                     <button type="button" id="close-canvass" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body">
-                    <?php
-                    $res = $conn->query("SELECT * FROM counter WHERE counterid != " . $_SESSION['user']['counterid']);
+                <div class="offcanvas-body" id="show-counter">
 
-
-                    if ($res->num_rows > 0) {
-
-
-                        while ($row = $res->fetch_assoc()) {
-
-                            if ($row['status'] == 1) {
-                                $status = "Open";
-                            } else {
-                                $status = "Closed";
-                            }
-
-
-                            echo '<div class="card round-1 pointer shadow-sm bg-light mb-3 cb"  onclick="transferMe(' . $row['counterid'] . ')">
-                                            <div class="card-body p-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="h1 mb-0 fw-"> <i class="fa-solid fa-window-maximize me-3"></i>
-                                                    </div>
-                                                    <div>
-                                                        <div class="h5 mb-0 fw-bold">
-                                                            ' . $row['countername'] . '
-                                                        </div>
-                                                        <div class="smalltxt">Status: ' . $status . '</div>
-                                                    </div>
-                                                  
-                                                </div>
-                                            </div>
-                                        </div>';
-                        }
-                    }
-                    ?>
 
 
                 </div>
@@ -191,6 +159,10 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                 var currenttoken_data;
                 var majorid;
 
+
+                function fetchCounter() {
+                    $("#show-counter").load('ajax/fetch-counter.php');
+                }
 
                 document.addEventListener("keydown", function(e) {
                     if (e.keyCode == 67 && e.shiftKey == true) callnext();
@@ -267,6 +239,43 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                 Swal.fire(
                                     'Oops!',
                                     'Nothing to call',
+                                    'info'
+                                )
+                            }
+
+                        }
+                    })
+
+
+                }
+
+                function breakQueue() {
+                    Swal.fire({
+                        title: 'Pause?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.post('ajax/breakQueue.php', {
+                                currenttoken
+                            }, function(data) {
+                                // alert(data);
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Paused',
+                                    showConfirmButton: false,
+                                    timer: 1000
+                                })
+                            });
+
+                            if (nexttoken == 0) {
+                                Swal.fire(
+                                    'Oops!',
+                                    'Nothing to break',
                                     'info'
                                 )
                             }
@@ -357,9 +366,9 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                         $('#c1-ns').text('-');
                         $('#c1-ident').text('-');
                         $('#c1-service').text('-');
-                        $('#c1-type').text('');
-                        $('#c1-program').text('');
-                        $('#c1-major').text('');
+                        $('#c1-type').text('-');
+                        $('#c1-program').text('-');
+                        $('#c1-major').text('-');
                         var c1 = 0;
                         var c2 = 0;
                         pending = 0;

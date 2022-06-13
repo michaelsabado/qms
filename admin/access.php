@@ -66,7 +66,7 @@ function check_input($data)
 
             <div class="content p-5">
                 <div class="d-flex mb-4 justify-content-between align-items-center">
-                    <div class="h4 fw- "><i class="fa-solid fa-hand-holding-heart me-3"></i><a href="users.php" class="text-decoration-none">Manage Users</a> > <?= $userdata['firstname'] ?></div>
+                    <div class="h4 fw- "><i class="fa-solid fa-users me-3"></i><a href="users.php" class="text-decoration-none">Manage Users</a> > <?= $userdata['firstname'] ?></div>
 
                 </div>
 
