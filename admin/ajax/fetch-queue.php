@@ -5,13 +5,12 @@ include '../../database/dbconfig.php';
 $counter = $_GET['counter'];
 $date = $_GET['date'];
 
-// echo $date;
 
 
 if ($counter == 'All') {
-    $res = $conn->query("SELECT * FROM `queue` a INNER JOIN `service` b on a.serviceid = b.serviceid WHERE a.date_created LIKE '$date%' AND a.status != 1");
+    $res = $conn->query("SELECT * FROM `queue` a INNER JOIN `service` b on a.serviceid = b.serviceid INNER JOIN major c ON a.majorid = c.majorid INNER JOIN program d ON c.programid = d.programid WHERE a.date_created LIKE '$date%' AND a.status != 1");
 } else {
-    $res = $conn->query("SELECT * FROM `queue` a INNER JOIN `service` b on a.serviceid = b.serviceid WHERE a.date_created LIKE '$date%' AND a.status != 1 AND a.counterid = $counter");
+    $res = $conn->query("SELECT * FROM `queue` a INNER JOIN `service` b on a.serviceid = b.serviceid INNER JOIN major c ON a.majorid = c.majorid INNER JOIN program d ON c.programid = d.programid WHERE a.date_created LIKE '$date%' AND a.status != 1 AND a.counterid = $counter");
 }
 
 ?>
@@ -51,7 +50,8 @@ if ($counter == 'All') {
             <tr>
                 <th>ID</th>
                 <th>Identification</th>
-                <th>Service</th>
+                <th>Program</th>
+                <th>Purpose</th>
                 <th>Token</th>
                 <th>Status</th>
                 <th>Timestamp</th>
@@ -79,13 +79,35 @@ if ($counter == 'All') {
                         $voided++;
                         $stats = "Voided";
                     }
+                    $type = '';
+                    switch ($row['category']) {
+                        case '1':
+                            $type = 'Request';
+                            break;
+                        case '2':
+                            $type = 'Enrollment';
+                            break;
+                        case '3':
+                            $type = 'Application';
+                            break;
+                        case '4':
+                            $type = 'Claiming';
+                            break;
+                        case '5':
+                            $type = 'Submission';
+                            break;
+                        case '6':
+                            $type = 'Query & Others';
+                            break;
+                    }
 
-
-
-                    echo '<tr>
+                    echo '<tr valign="middle">
                         <td>' . $count . '</td>
                         <td>' . $row['identification'] . '</td>
-                        <td class="text-nowrap">' . $row['description'] . '</td>
+                        <td>' . $row['programdescription'] . '<br>
+                        <span class="text-nowrap smalltxt">' . $row['majordescription'] . '</span</td>
+                        <td>' . $type . '<br>
+                        <span class="text-nowrap smalltxt">' . $row['description'] . '</span</td>
                         <td>' . $row['token'] . '</td>
                         <td>' . $stats . '</td>
                         <td>' . $row['date_created'] . '</td>

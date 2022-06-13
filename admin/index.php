@@ -12,8 +12,9 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 1) {
 
 $a = $conn->query("SELECT * FROM counter")->num_rows;
 $b = $conn->query("SELECT * FROM service")->num_rows;
-$c = $conn->query("SELECT * FROM user")->num_rows;
-
+$c = $conn->query("SELECT * FROM user WHERE usertype != 1")->num_rows;
+$d = $conn->query("SELECT * FROM program")->num_rows;
+$e = $conn->query("SELECT * FROM major WHERE majordescription != 'n/a'")->num_rows;
 ?>
 
 <!DOCTYPE html>
@@ -40,18 +41,18 @@ $c = $conn->query("SELECT * FROM user")->num_rows;
 
 
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card round-2  shadow-sm  mb-3 box">
                                 <div class="card-body p-4">
                                     <div class="display-5 float-end"><i class="fa-solid fa-window-restore"></i></div>
-                                    <div class="h6 fw-bold">Counters</div>
+                                    <div class="h6 fw-bold">Windows</div>
                                     <div class="display-5"><?= $a ?></div>
 
 
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card round-2  shadow-sm  mb-3 box">
                                 <div class="card-body p-4">
                                     <div class="display-5 float-end"><i class="fa-solid fa-hand-holding-heart"></i></div>
@@ -62,13 +63,29 @@ $c = $conn->query("SELECT * FROM user")->num_rows;
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card round-2  shadow-sm  mb-3 box">
                                 <div class="card-body p-4">
                                     <div class="display-5 float-end"><i class="fa-solid fa-users"></i></div>
 
-                                    <div class="h6 fw-bold">Users</div>
+                                    <div class="h6 fw-bold">Users/Operators</div>
                                     <div class="display-5"><?= $c ?></div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card round-2  shadow-sm  mb-3 box">
+                                <div class="card-body p-4">
+                                    <div class="display-5 float-end"><i class="fas fa-graduation-cap"></i>
+
+                                    </div>
+
+                                    <div class="h6 fw-bold">Programs</div>
+                                    <div class="smalltxt float-end me-4"><?= $e ?> Majors</div>
+                                    <div class="display-5"><?= $d ?></div>
+
 
 
                                 </div>
@@ -86,7 +103,7 @@ $c = $conn->query("SELECT * FROM user")->num_rows;
                                             <div class="col-md-4">
                                                 <div class="smalltxt">Select Counter</div>
 
-                                                <select name="counter" id="" class="form-select round-1" required>
+                                                <select name="counter" id="sel-window" class="form-select round-1" required>
                                                     <option value="All">All</option>
                                                     <?php
 
@@ -94,7 +111,7 @@ $c = $conn->query("SELECT * FROM user")->num_rows;
 
                                                     if ($res->num_rows > 0) {
                                                         while ($row = $res->fetch_assoc()) {
-                                                            echo '<option value="' . $row['counterid'] . '">' . $row['countername'] . '</option>';
+                                                            echo '<option  value="' . $row['counterid'] . '">Window ' . $row['windowno'] . '</option>';
                                                         }
                                                     }
 
@@ -103,11 +120,13 @@ $c = $conn->query("SELECT * FROM user")->num_rows;
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="smalltxt">Select date</div>
-                                                <input type="date" value="<?= date("Y-m-d") ?>" name="date" class="form-control round-1 mb-3" required>
+                                                <input type="date" value="<?= date("Y-m-d") ?>" name="date" id="sel-date" class="form-control round-1 mb-3" required>
                                             </div>
                                             <div class="col-md-4">
-                                                <div class="smalltxt">.</div>
-                                                <button type="submit" class="btn btn-primary round-1 shadow-sm">Fetch <i class="fa-solid fa-download ms-2"></i></button>
+                                                <div class="smalltxt text-white">.</div>
+                                                <button type="submit" class="btn btn-primary round-1 shadow-sm me-2">Fetch <i class="fa-solid fa-download ms-2"></i></button>
+                                                <button type="button" class="btn btn-success round-1 shadow-sm" onclick="printMe()">Create PDF <i class="fas fa-print ms-2"></i></button>
+
                                             </div>
                                         </div>
                                     </form>
@@ -139,7 +158,11 @@ $c = $conn->query("SELECT * FROM user")->num_rows;
             <script>
                 $("#nav-dash").addClass('mynav-active');
 
+                function printMe() {
+                    window.location.href = "print.php?counter=" + $("#sel-window").val() + "&date=" + $("#sel-date").val();
+                }
 
+                $("#queue-table").load('ajax/fetch-queue.php', $("#fetchform").serialize());
 
                 $("#fetchform").submit(function(e) {
                     e.preventDefault();

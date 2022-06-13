@@ -2,12 +2,23 @@
 session_start();
 include '../database/dbconfig.php';
 
-if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
-    header("Location: ../main/login.php");
-}
-$counter = $_SESSION['user']['counterid'];
 
-$date = (isset($_GET['date']) && $_GET['date'] != "") ? $_GET['date'] : date('Y-m-d');
+$counter = $_GET['counter'];
+$window = '';
+$date = $_GET['date'];
+
+
+
+if ($counter == 'All') {
+    $window = "All";
+    $res = $conn->query("SELECT * FROM `queue` a INNER JOIN `service` b on a.serviceid = b.serviceid INNER JOIN major c ON a.majorid = c.majorid INNER JOIN program d ON c.programid = d.programid WHERE a.date_created LIKE '$date%' AND a.status != 1");
+} else {
+
+    $dd = $conn->query("SELECT windowno FROM counter WHERE counterid = $counter");
+    $dd = $dd->fetch_assoc()['windowno'];
+    $window = '#' . $dd;
+    $res = $conn->query("SELECT * FROM `queue` a INNER JOIN `service` b on a.serviceid = b.serviceid INNER JOIN major c ON a.majorid = c.majorid INNER JOIN program d ON c.programid = d.programid WHERE a.date_created LIKE '$date%' AND a.status != 1 AND a.counterid = $counter");
+}
 
 ?>
 <!DOCTYPE html>
@@ -46,20 +57,6 @@ $date = (isset($_GET['date']) && $_GET['date'] != "") ? $_GET['date'] : date('Y-
 
     <div class="container " id="element-to-print">
 
-        <?php
-
-        // echo $date;
-
-
-        if ($counter == 'All') {
-            $res = $conn->query("SELECT * FROM `queue` a INNER JOIN `service` b on a.serviceid = b.serviceid  INNER JOIN major c ON a.majorid = c.majorid INNER JOIN program d ON c.programid = d.programid WHERE a.date_created LIKE '$date%' AND a.status != 1");
-        } else {
-            $res = $conn->query("SELECT * FROM `queue` a INNER JOIN `service` b on a.serviceid = b.serviceid INNER JOIN major c ON a.majorid = c.majorid INNER JOIN program d ON c.programid = d.programid WHERE a.date_created LIKE '$date%' AND a.status != 1 AND a.counterid = $counter");
-        }
-
-
-
-        ?>
 
 
 
@@ -78,7 +75,7 @@ $date = (isset($_GET['date']) && $_GET['date'] != "") ? $_GET['date'] : date('Y-
 
         </div>
         <div class="text-start">
-            <div class="h6"><b>Window:</b> #<?= $_SESSION['user']['windowno'] ?></div>
+            <div class="h6"><b>Window:</b> <?= $window ?></div>
             <div class="h6"><b>User: </b> <?= $_SESSION['user']['firstname'] . " " . $_SESSION['user']['lastname'] ?></div>
             <div class="h6"><b>Date:</b> <?= $_GET['date'] ?></div>
         </div>
@@ -187,7 +184,7 @@ $date = (isset($_GET['date']) && $_GET['date'] != "") ? $_GET['date'] : date('Y-
         var element = document.getElementById('element-to-print');
         var opt = {
             margin: 0,
-            filename: '<?= $_GET['date'] ?>_QMS-Report.pdf',
+            filename: '<?= date('Y-m-d') ?>_Admin-QMS-Report.pdf',
             image: {
                 type: 'jpeg',
                 quality: 1
@@ -202,11 +199,11 @@ $date = (isset($_GET['date']) && $_GET['date'] != "") ? $_GET['date'] : date('Y-
             }
         };
 
-        html2pdf().set(opt).from(element).save();
+        // html2pdf().set(opt).from(element).save();
 
-        setTimeout(function() {
-            window.location.href = "records.php?date=" + "<?= $_GET['date'] ?>";
-        }, 1000);
+        // setTimeout(function() {
+        //     window.location.href = "index.php";
+        // }, 1000);
     </script>
 </body>
 

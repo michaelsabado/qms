@@ -79,13 +79,14 @@ function check_input($data)
                             <?= $message ?>
                             <table id="example" class="table  table-striped" style="width:100%">
                                 <thead>
-                                    <tr>
+                                    <tr valign="top">
                                         <th>ID</th>
                                         <th>Fullname</th>
                                         <th>Username</th>
                                         <th>Usertype</th>
                                         <th>Assigned Window</th>
                                         <th>Actions</th>
+                                        <th class="smalltxt text-center">Reset<br>Pass</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -104,8 +105,9 @@ function check_input($data)
                                         <td>' . $row['username'] . '</td>
                                         <td>' . $usertype . '</td>
                                         <td>Window ' . $row['windowno'] . '</td>
-                                        <td><i class="fa-solid fa-pen-to-square me-3 text-primary pointer" data-bs-toggle="modal" data-bs-target="#exampleModal1" onclick="initEdit(' . $row['userid'] . ',\'' . $row['firstname'] . '\', \'' . $row['middlename'] . '\', \'' . $row['lastname'] . '\', \'' . $row['username'] . '\', ' . $row['counterid'] . ')"></i><i class="fa-solid fa-trash-can text-danger pointer" onclick="deleteMe(' . $row['userid'] . ')"></i>
-                                        <a href="access.php?id=' . $row['userid'] . '" class="text-decoration-none ms-3" >View Access</a></td>
+                                        <td><i class="fa-solid fa-pen-to-square me-3 text-warning pointer" data-bs-toggle="modal" data-bs-target="#exampleModal1" onclick="initEdit(' . $row['userid'] . ',\'' . $row['firstname'] . '\', \'' . $row['middlename'] . '\', \'' . $row['lastname'] . '\', \'' . $row['username'] . '\', ' . $row['counterid'] . ')"></i><i class="fa-solid fa-trash-can text-danger pointer" onclick="deleteMe(' . $row['userid'] . ')"></i>
+                                        <a href="access.php?id=' . $row['userid'] . '" class="text-decoration-none badge bg-info text-dark  ms-2">View Access</a></td>
+                                        <td class="text-center"> <a href="access.php?id=' . $row['userid'] . '" class="text-decoration-none text-success" ><i class="fas fa-sync"></i></a></td>
                                     </tr>';
 
                                             $count++;

@@ -139,7 +139,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
 
             <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
                 <div class="offcanvas-header">
-                    <h5 id="offcanvasRightLabel">Transfer token</h5>
+                    <h5 id="offcanvasRightLabel">Transfer Client</h5>
                     <button type="button" id="close-canvass" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body" id="show-counter">
@@ -164,12 +164,16 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                     $("#show-counter").load('ajax/fetch-counter.php');
                 }
 
+
+
                 document.addEventListener("keydown", function(e) {
-                    if (e.keyCode == 67 && e.shiftKey == true) callnext();
-                    if (e.keyCode == 86 && e.shiftKey == true) voidMe();
-                    if (e.keyCode == 82 && e.shiftKey == true) recall();
-                    if (e.keyCode == 86 && e.shiftKey == true) voidMe();
-                    if (e.keyCode == 84 && e.shiftKey == true) $("#open-canvass").click();
+                    if ($('#toggleState').is(":checked")) {
+                        if (e.keyCode == 67 && e.shiftKey == true) callnext();
+                        if (e.keyCode == 86 && e.shiftKey == true) voidMe();
+                        if (e.keyCode == 82 && e.shiftKey == true) recall();
+                        if (e.keyCode == 86 && e.shiftKey == true) voidMe();
+                        if (e.keyCode == 84 && e.shiftKey == true) $("#open-canvass").click();
+                    }
                 })
 
 
@@ -221,26 +225,28 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                         confirmButtonText: 'Yes'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            $.post('ajax/callnext.php', {
-                                currenttoken,
-                                nexttoken
-                            }, function(data) {
-                                // alert(data);
-                                Swal.fire({
-                                    position: 'top-end',
-                                    icon: 'success',
-                                    title: 'Called',
-                                    showConfirmButton: false,
-                                    timer: 1000
-                                })
-                            });
+
 
                             if (nexttoken == 0) {
                                 Swal.fire(
                                     'Oops!',
-                                    'Nothing to call',
+                                    'No pending client.',
                                     'info'
                                 )
+                            } else {
+                                $.post('ajax/callnext.php', {
+                                    currenttoken,
+                                    nexttoken
+                                }, function(data) {
+                                    // alert(data);
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: 'Called',
+                                        showConfirmButton: false,
+                                        timer: 1000
+                                    })
+                                });
                             }
 
                         }
@@ -251,33 +257,37 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
 
                 function breakQueue() {
                     Swal.fire({
-                        title: 'Pause?',
+                        title: 'Take a break?',
+                        text: 'Make sure to finish current token.',
                         icon: 'question',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes'
+                        confirmButtonText: 'Yes, I\'m done'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            $.post('ajax/breakQueue.php', {
-                                currenttoken
-                            }, function(data) {
-                                // alert(data);
-                                Swal.fire({
-                                    position: 'top-end',
-                                    icon: 'success',
-                                    title: 'Paused',
-                                    showConfirmButton: false,
-                                    timer: 1000
-                                })
-                            });
 
-                            if (nexttoken == 0) {
+
+                            if (active == 0) {
                                 Swal.fire(
                                     'Oops!',
-                                    'Nothing to break',
+                                    'You have no active client. You can take your break now 😊',
                                     'info'
                                 )
+                            } else {
+                                $.post('ajax/breakQueue.php', {
+                                    currenttoken
+                                }, function(data) {
+                                    // alert(data);
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: 'Queue Paused',
+                                        showConfirmButton: false,
+                                        timer: 1000
+                                    })
+                                });
+                                active = 0;
                             }
 
                         }
@@ -331,13 +341,13 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                             nexttoken: nexttoken,
                             majorid: majorid
                         }, function(data) {
-                            alert(data)
+                            // alert(data)
 
                             $("#close-canvass").click();
                             Swal.fire({
                                 position: 'top-end',
                                 icon: 'success',
-                                title: 'Token transferred',
+                                title: 'Client transferred',
                                 showConfirmButton: false,
                                 timer: 1000
                             })
@@ -353,7 +363,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                 }
 
 
-
+                var active = 0;
                 var pending = 0;
                 var served = 0;
                 setInterval(function() {
@@ -374,6 +384,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                         pending = 0;
                         served = 0;
                         $("#pending").text(pending);
+
                         for (var x = 0; x < queues.length; x++) {
                             var queue = JSON.parse(queues[x]);
 
@@ -387,7 +398,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                 }
                             } else if (queue.status == 1) {
                                 if ((c1 == 0 && queue.iscalled == 1) || queue.iscalled == 2) {
-
+                                    active = 1;
                                     $("#c1-ns").text(queue.token);
                                     $("#c1-ident").text(queue.identification);
                                     $('#c1-service').text(queue.description);
@@ -443,6 +454,9 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
 
                                     $('#nextqueue').append(element);
                                 }
+
+
+                                if (pending == 0) nexttoken = 0;
                             }
 
 
@@ -452,6 +466,8 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
 
 
                         }
+
+
 
                     });
 
