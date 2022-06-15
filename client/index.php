@@ -59,10 +59,10 @@ include '../database/dbconfig.php';
 
     </div>
     <div class="d-flex Justify-content-center">
-        <div class="vh-100  d-flex align-items-center flex-column justify-content-center mx-auto" style="width: 50vw;">
+        <div class="vh-100  d-flex align-items-center flex-column justify-content-center mx-auto" style="width: 40vw;">
 
 
-            <div class="card border-0 round-2 w-100 translucent">
+            <div class="card border-0 round-2  w-100 translucent">
                 <div class="card-body p-5">
                     <div class="d-flex align-items-center mb-5">
                         <div class=" me-3"><img src="../images/psu.png" height="80" alt=""></div>
@@ -74,7 +74,7 @@ include '../database/dbconfig.php';
                     </div>
 
                     <form action="" method="post" id="queue-form">
-                        <div class="h6 fw-bold"><span class="h1 fw-bolder me-3">1.</span> Name / School ID</div>
+                        <div class="h6 fw-bold"><span class="h1 fw-bolder me-3">1.</span> Name</div>
                         <input type="text" name="identification" class="form-control form-control-lg mb-4 round-1" placeholder="Start here" value="" required>
                         <div class="h6 fw-bold"><span class="h1 fw-bolder me-3">2.</span> Select Program</div>
                         <!-- <div class="d-flex justify-content-stretch mb-4">
@@ -108,7 +108,7 @@ include '../database/dbconfig.php';
 
                         <div class="h6 fw-bold"><span class="h1 fw-bolder me-3">4.</span> Select Service</div>
                         <div class="row">
-                            <div class="col">
+                            <div class="col-5">
                                 <select class="form-select form-select-lg mb-2 round-1" name="category" required onchange="fetchServices($(this).val())">
                                     <option value="">- - -</option>
                                     <option value="1">Request</option>
@@ -119,7 +119,7 @@ include '../database/dbconfig.php';
                                     <option value="6">Query & Others</option>
                                 </select>
                             </div>
-                            <div class="col">
+                            <div class="col-7">
                                 <select id="services" name="service" class="form-select form-select-lg mb-5 round-1" required>
 
                                 </select>

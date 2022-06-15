@@ -95,7 +95,7 @@ $e = $conn->query("SELECT * FROM major WHERE majordescription != 'n/a'")->num_ro
                             <div class="card round-2 border-0 shadow-sm  mb-3">
                                 <div class="card-body p-4">
 
-                                    <div class="h6 fw-bold">Generate Report</div>
+                                    <div class="h6 fw-bold">Fetch Record</div>
                                     <form action="" id="fetchform">
 
 

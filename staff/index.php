@@ -51,12 +51,13 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                 <div class="d-flex justify-content-between">
                                     <div class="w-100">
                                         <div class="h6"><b>Client</b>: <span id="c1-ident">-</span></div>
-                                        <div class="h6"><b>Program</b>: <span id="c1-program">-</span></div>
-                                        <div class="h6"><b>Major</b>: <span id="c1-major">-</span></div>
+                                        <div class="h6"><b>Purpose</b>: <span id="c1-type">-</span> | <span id="c1-service">-</span></div>
+
                                     </div>
                                     <div class="w-100">
-                                        <div class="h6"><b>Purpose</b>: <span id="c1-type">-</span></div>
-                                        <div class="h6"><b>Selected Service</b>: <span id="c1-service">-</span></div>
+                                        <!-- <div class="h6"><b>Service</b>: </div> -->
+                                        <div class="h6"><b>Program</b>: <span id="c1-program">-</span></div>
+                                        <div class="h6"><b>Major</b>: <span id="c1-major">-</span></div>
                                     </div>
                                 </div>
 
@@ -260,6 +261,51 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
 
                 }
 
+                function prio(priotoken) {
+                    if (nexttoken == 0) {
+                        Swal.fire(
+                            'Oops!',
+                            'No pending client.',
+                            'info'
+                        )
+                    } else {
+                        Swal.fire({
+                            title: 'Prioritize this token?',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+
+                                alert("This is: " + active);
+
+                                $.post('ajax/prioritize.php', {
+                                    active,
+                                    currenttoken,
+                                    priotoken
+                                }, function(data) {
+                                    // alert(data);
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: 'Client prioritized',
+                                        showConfirmButton: false,
+                                        timer: 1000
+                                    })
+                                });
+
+
+                            }
+                        })
+                    }
+
+
+
+                }
+
+
                 function breakQueue() {
                     if (active == 0) {
                         Swal.fire(
@@ -459,8 +505,8 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                     var element = ` <li class="list-group-item  text-center bg-light  mb-1">
                                         <div class="d-flex justify-content-between">
                                             <div></div>
-                                            <div class="h6 mb-0 fw-bold">` + queue.token + `</div>
-                                            <div><i class="far fa-caret-square-down"></i></div>
+                                            <div class="h5 mb-0 fw-bold">` + queue.token + `</div>
+                                            <div><i class="fas fa-running pointer text-primary h5 mb-0" onclick="prio(` + queue.queueid + `)"></i></div>
                                         </div>
                                     </li> `;
 

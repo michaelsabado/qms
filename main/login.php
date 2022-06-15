@@ -32,10 +32,16 @@ if (isset($_POST['submit'])) {
 
             redirectMe($user['usertype']);
         } else {
-            $message = "Incorrect Password";
+            $message = '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Oops!</strong> Incorrect password.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>';
         }
     } else {
-        $message = "Account not found.";
+        $message = '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Oops!</strong> Account not found.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>';
     }
 }
 
@@ -85,7 +91,7 @@ function redirectMe($val)
 </head>
 
 <body>
-    <?= $message ?>
+
 
     <div class="">
         <div class="text-center" style="position: relative; z-index: 100;"><img src=" ../images/psu.png" class="mb-3 mt-5" height="130" alt=""></div>
@@ -98,13 +104,14 @@ function redirectMe($val)
                 <div class="alert alert-light round-1 shadow-sm border-0 smalltxt" role="alert">
                     Welcome to <b>Queue Management System</b>, please login.
                 </div>
+                <?= $message ?>
                 <form action="" method="post" class="mt-4">
                     <div class="h6 fw-">Username</div>
                     <input type="text" name="username" class="form-control round-1 mb-3" required>
                     <div class="h6 fw-">Password</div>
                     <input type="password" name="password" class="form-control round-1 mb-3" required>
                     <button type="submit" name="submit" class="btn btn-primary round-1 shadow w-100 mt-3 mb-3">Login <i class="fas fa-angle-double-right"></i></button>
-                    <div class="text-center">Forgot password?</div>
+                    <div class="text-center pointer" onclick="resetPass()">Forgot password?</div>
                 </form>
 
 
@@ -116,6 +123,16 @@ function redirectMe($val)
 
     <div class="h6 text-center w-100 text-white" style="position: fixed; bottom:10px;z-index: -2">Copyright &copy; Pangasinan State University</div>
 
+    <script src="../partials/sweetalert.js"></script>
+    <script>
+        function resetPass() {
+            Swal.fire(
+                'Contact Administrator',
+                'And request for password reset.',
+                'info'
+            )
+        }
+    </script>
 </body>
 
 </html>

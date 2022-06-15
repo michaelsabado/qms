@@ -87,7 +87,7 @@ $user = $conn->query($sql)->fetch_assoc();
             <?php include '../partials/_nav.php' ?>
 
             <div class="content p-5">
-                <div class="h4 fw-  mb-4"><i class="fa-solid fa-book me-3"></i>Account</div>
+                <div class="h4 fw-  mb-4"><i class="fa-solid fa-user-gear me-3"></i>Account</div>
                 <div class="" style="height: calc(100vh - 190px); overflow-y: auto">
 
 

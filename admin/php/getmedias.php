@@ -15,6 +15,8 @@ if ($res->num_rows > 0) {
             $str = '<video src="../uploads/' . $row['file_name'] . '" autoplay muted loop class="img-fluid" alt="">';
         } else if ($media[1] == 'jpg' || $media[1] == 'png' || $media[1] == 'jpeg' || $media[1] == 'webp') {
             $str = '<img src="../uploads/' . $row['file_name'] . '" class="img-fluid" alt="">';
+        } else {
+            $str = '';
         }
 
         echo ' <div class="col-md-3 col-12 p-3 border round-2">

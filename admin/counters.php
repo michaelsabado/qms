@@ -32,7 +32,7 @@ function check_input($data)
 
 <head>
     <?php include '../partials/_header.php' ?>
-    <title>QMS | Windowws</title>
+    <title>QMS | Windows</title>
 
 </head>
 
@@ -46,7 +46,7 @@ function check_input($data)
             <?php include '../partials/_admin_nav.php' ?>
 
             <div class="content p-5">
-                <div class="h4 fw-  mb-4"><i class="fa-solid fa-window-restore me-3 "></i>Manage Windowws</div>
+                <div class="h4 fw-  mb-4"><i class="fa-solid fa-window-restore me-3 "></i>Manage Windows</div>
 
                 <div class="row">
                     <div class="col-md-4">
