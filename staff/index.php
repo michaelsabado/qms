@@ -178,16 +178,17 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
 
 
                 function recall() {
-                    Swal.fire({
-                        title: 'Recall token?',
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            if (currenttoken != 0) {
+
+                    if (currenttoken != 0) {
+                        Swal.fire({
+                            title: 'Recall token?',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
                                 $.post('ajax/recall.php', {
                                     id: currenttoken
                                 }, function(data) {
@@ -199,41 +200,43 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                         timer: 1000
                                     })
                                 });
-                            } else {
-                                Swal.fire(
-                                    'Oops!',
-                                    'Nothing to call',
-                                    'info'
-                                )
+
+
+
                             }
+                        })
+                    } else {
+                        Swal.fire(
+                            'Oops!',
+                            'Nothing to recall',
+                            'info'
+                        )
+                    }
 
-
-
-                        }
-                    })
 
 
                 }
 
                 function callnext() {
-                    Swal.fire({
-                        title: 'Call next token?',
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
+                    if (nexttoken == 0) {
+                        Swal.fire(
+                            'Oops!',
+                            'No pending client.',
+                            'info'
+                        )
+                    } else {
+                        Swal.fire({
+                            title: 'Call next token?',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
 
 
-                            if (nexttoken == 0) {
-                                Swal.fire(
-                                    'Oops!',
-                                    'No pending client.',
-                                    'info'
-                                )
-                            } else {
+
                                 $.post('ajax/callnext.php', {
                                     currenttoken,
                                     nexttoken
@@ -247,34 +250,37 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                         timer: 1000
                                     })
                                 });
-                            }
 
-                        }
-                    })
+
+                            }
+                        })
+                    }
+
 
 
                 }
 
                 function breakQueue() {
-                    Swal.fire({
-                        title: 'Take a break?',
-                        text: 'Make sure to finish current token.',
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, I\'m done'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
+                    if (active == 0) {
+                        Swal.fire(
+                            'Oops!',
+                            'You have no active client. You can take your break now 😊',
+                            'success'
+                        )
+                    } else {
+                        Swal.fire({
+                            title: 'Take a break?',
+                            text: 'Make sure to finish current token.',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, I\'m done'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
 
 
-                            if (active == 0) {
-                                Swal.fire(
-                                    'Oops!',
-                                    'You have no active client. You can take your break now 😊',
-                                    'info'
-                                )
-                            } else {
+
                                 $.post('ajax/breakQueue.php', {
                                     currenttoken
                                 }, function(data) {
@@ -288,10 +294,14 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                     })
                                 });
                                 active = 0;
-                            }
+                                nexttoken = 0;
+                                currenttoken = 0;
 
-                        }
-                    })
+
+                            }
+                        })
+                    }
+
 
 
                 }
@@ -351,6 +361,8 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                 showConfirmButton: false,
                                 timer: 1000
                             })
+
+                            active = 0;
                         });
                     } else {
                         Swal.fire(

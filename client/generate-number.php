@@ -30,17 +30,20 @@ if ($res->num_rows > 0) {
 }
 
 
-$sql = "SELECT b.counterid FROM access a INNER JOIN user b on a.userid = b.userid WHERE a.majorid = $major";
-$res = $conn->query($sql);
+if ($serviceid != 54) {
+    //fetching the assigned counter/window
+    $sql = "SELECT b.counterid FROM access a INNER JOIN user b on a.userid = b.userid WHERE a.majorid = $major";
+    $res = $conn->query($sql);
 
-if ($res->num_rows > 0) {
+    if ($res->num_rows > 0) {
 
-    $d = $res->fetch_assoc();
+        $d = $res->fetch_assoc();
 
-    $sql = "INSERT INTO queue VALUES(null, '$identification', '$major', $serviceid, " . $d['counterid'] . ", '$token', 1, '$time', 0)";
-    $conn->query($sql);
+        $sql = "INSERT INTO queue VALUES(null, '$identification', '$major', $serviceid, " . $d['counterid'] . ", '$token', 1, '$time', 0)";
+        $conn->query($sql);
 
-    echo $conn->insert_id;
+        echo $conn->insert_id;
+    }
 } else {
     $sql = "SELECT DISTINCT(userid) FROM access";
     $res = $conn->query($sql);
@@ -63,12 +66,15 @@ if ($res->num_rows > 0) {
     } else {
         echo 102;
     }
-
-
-
-    // $conn->query($sql);
-
 }
+
+
+
+
+
+// $conn->query($sql);
+
+
 
 
 function check_input($data)
