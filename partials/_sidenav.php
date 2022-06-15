@@ -15,7 +15,7 @@ $counter_id = $_SESSION['user']['counterid'];
         <hr>
         <div class="d-flex align-items-center mb-3">
             <div class="me-3">
-                <img src="../images/profile.jpg" id="profile-pic" height="50" alt="">
+                <img src="../images/default.webp" id="profile-pic" height="50" alt="">
             </div>
             <div>
                 <div class="h6  fw-bold mb-0"><?= $name ?></div>
