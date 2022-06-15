@@ -9,7 +9,7 @@ $identification = check_input($_POST['identification']);
 $program = check_input($_POST['program']);
 $major = check_input($_POST['major']);
 $serviceid = check_input($_POST['service']);
-
+$category = check_input($_POST['category']);
 $time = date('Y-m-d h:i:s');
 $token = date('is');
 $today = date('Y-m-d');
@@ -30,7 +30,7 @@ if ($res->num_rows > 0) {
 }
 
 
-if ($serviceid != 54) {
+if ($category != 6) {
     //fetching the assigned counter/window
     $sql = "SELECT b.counterid FROM access a INNER JOIN user b on a.userid = b.userid WHERE a.majorid = $major";
     $res = $conn->query($sql);

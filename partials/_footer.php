@@ -21,7 +21,6 @@
         let s = today.getSeconds();
         m = checkTime(m);
         s = checkTime(s);
-
         if (h < 12) {
             e = "AM";
 
@@ -32,6 +31,9 @@
         } else {
             e = "PM";
             h -= 12;
+            if (h == 0) {
+                h = 12;
+            }
         }
         document.getElementById('txt').innerHTML = '<i class="fas fa-clock me-2"></i>' + h + ":" + m + " " + e;
         setTimeout(startTime, 1000);

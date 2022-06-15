@@ -10,6 +10,14 @@ include '../database/dbconfig.php';
     <?php include '../partials/_header.php' ?>
     <title>Get Queue</title>
     <style>
+        body {
+            background-image: linear-gradient(to top, rgba(0, 0, 250, 0.7), rgba(250, 250, 250, 0.8)), url("../images/bg.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+
+        }
+
         .slideShow {
             display: flex;
             justify-content: center;
@@ -34,27 +42,41 @@ include '../database/dbconfig.php';
         .mybtn {
             background-color: rgba(0, 0, 100, 0.1);
         }
+
+        .translucent {
+            background-color: rgba(250, 250, 250, 0.7);
+            backdrop-filter: blur(5px);
+        }
     </style>
 </head>
 
 <body>
-    <div class="d-flex ">
-        <div class="vh-100  d-flex align-items-center flex-column justify-content-center" style="width: 40vw;">
-            <div class="d-flex align-items-center">
-                <div class="mb-3 me-4"><img src="../images/psu.png" height="100" alt=""></div>
-                <div class="text-start">
-                    <div class="h1 fw-bold">Welcome to PSU!</div>
-                    <div class="h4 fw-">School of Advanced Studies</div>
-                </div>
+    <div class="d-flex justify-content-between w-100 p-3" style="position: fixed">
+        <div class="h1 fw-bold mb-2" id="txt"></div>
+        <div class="h1 fw-bold text-uppercase"><i class="fas fa-calendar-day me-2"></i><?= date("F d, Y") ?>
+        </div>
 
-            </div>
 
-            <div class="card border-0 w-100">
+    </div>
+    <div class="d-flex Justify-content-center">
+        <div class="vh-100  d-flex align-items-center flex-column justify-content-center mx-auto" style="width: 50vw;">
+
+
+            <div class="card border-0 round-2 w-100 translucent">
                 <div class="card-body p-5">
+                    <div class="d-flex align-items-center mb-5">
+                        <div class=" me-3"><img src="../images/psu.png" height="80" alt=""></div>
+                        <div class="text-start">
+                            <div class="h2 fw-bold mb-0">Welcome to PSU</div>
+                            <div class="h4 fw- mb-0">School of Advanced Studies</div>
+                        </div>
+
+                    </div>
+
                     <form action="" method="post" id="queue-form">
-                        <div class="h6 fw-bold">1. Name / School ID</div>
+                        <div class="h6 fw-bold"><span class="h1 fw-bolder me-3">1.</span> Name / School ID</div>
                         <input type="text" name="identification" class="form-control form-control-lg mb-4 round-1" placeholder="Start here" value="" required>
-                        <div class="h6 fw-bold">2. Select Program</div>
+                        <div class="h6 fw-bold"><span class="h1 fw-bolder me-3">2.</span> Select Program</div>
                         <!-- <div class="d-flex justify-content-stretch mb-4">
                             <div class="card text-center p-3 w-100 me-3 fw-bold mybtn round-1 shadow-sm" onclick="selectCounter($(this),2)">
                                 Registrar
@@ -77,33 +99,41 @@ include '../database/dbconfig.php';
                             ?>
 
                         </select>
-                        <div class="h6 fw-bold">3. Select Major</div>
+                        <div class="h6 fw-bold"><span class="h1 fw-bolder me-3">3.</span> Select Major</div>
 
                         <select name="major" id="majors" class="form-select form-select-lg mb-4 round-1" required>
 
 
                         </select>
 
-                        <div class="h6 fw-bold">4. Select Service</div>
-                        <select class="form-select form-select-lg mb-2 round-1" required onchange="fetchServices($(this).val())">
-                            <option value="">- - -</option>
-                            <option value="1">Request</option>
-                            <option value="2">Enrollment</option>
-                            <option value="3">Application</option>
-                            <option value="4">Claiming</option>
-                            <option value="5">Submission</option>
-                            <option value="6">Query & Others</option>
-                        </select>
-                        <select id="services" name="service" class="form-select form-select-lg mb-5 round-1" required>
+                        <div class="h6 fw-bold"><span class="h1 fw-bolder me-3">4.</span> Select Service</div>
+                        <div class="row">
+                            <div class="col">
+                                <select class="form-select form-select-lg mb-2 round-1" name="category" required onchange="fetchServices($(this).val())">
+                                    <option value="">- - -</option>
+                                    <option value="1">Request</option>
+                                    <option value="2">Enrollment</option>
+                                    <option value="3">Application</option>
+                                    <option value="4">Claiming</option>
+                                    <option value="5">Submission</option>
+                                    <option value="6">Query & Others</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <select id="services" name="service" class="form-select form-select-lg mb-5 round-1" required>
 
-                        </select>
-                        <button type="submit" class="btn btn-lg w-100 btn-primary round-1 shadow" href="generate-number.php">5. Generate Number <i class="fas fa-angle-double-right"></i></button>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-lg w-100 btn-primary round-1 shadow" href="generate-number.php">5. Get Number <i class="fas fa-angle-double-right"></i></button>
                     </form>
                 </div>
             </div>
         </div>
 
-        <div class="vh-100 p-3" style="width: 60vw;" id="right-panel">
+        <!-- <div class="vh-100 p-3" style="width: 60vw;" id="right-panel">
             <div class="float-end">
                 <div class="h1 fw-bold text-uppercase"><i class="fas fa-calendar-day me-2"></i><?= date("F d, Y") ?>
                 </div>
@@ -119,7 +149,7 @@ include '../database/dbconfig.php';
             <div class="slideShow">
 
             </div>
-        </div>
+        </div> -->
         <?php include '../partials/_footer.php' ?>
         <script>
             initialize();
@@ -182,7 +212,7 @@ include '../database/dbconfig.php';
                 let s = today.getSeconds();
                 m = checkTime(m);
                 s = checkTime(s);
-
+                console.log(h);
                 if (h < 12) {
                     e = "AM";
 
@@ -193,6 +223,11 @@ include '../database/dbconfig.php';
                 } else {
                     e = "PM";
                     h -= 12;
+
+                    if (h == 0) {
+                        h = 12;
+                    }
+
                 }
                 document.getElementById('txt').innerHTML = '<i class="fas fa-clock me-2"></i>' + h + ":" + m + " " + e;
                 setTimeout(startTime, 1000);
@@ -201,6 +236,7 @@ include '../database/dbconfig.php';
 
 
             function checkTime(i) {
+
                 if (i < 10) {
                     i = "0" + i
                 }; // add zero in front of numbers < 10
@@ -208,59 +244,59 @@ include '../database/dbconfig.php';
             }
 
 
-            var slides = <?php echo json_encode($slides) ?>;
-            var scount = slides.length;
-            if (scount > 0) {
-                $(document).ready(function() {
-                    render_slides(0)
-                })
-            }
+            // var slides = <?php echo json_encode($slides) ?>;
+            // var scount = slides.length;
+            // if (scount > 0) {
+            //     $(document).ready(function() {
+            //         render_slides(0)
+            //     })
+            // }
 
-            function render_slides(k) {
-                if (k >= scount)
-                    k = 0;
-                var src = slides[k]
-                k++;
-                var t = src.split('.');
-                var file;
-                t = t[1];
-                if (t == 'mp4') {
-                    file = $("<video id='slide' src='../uploads/" + src + "' onended='render_slides(" + k + ")' autoplay='true' muted='muted'></video>");
-                } else {
-                    file = $("<img id='slide' src='../uploads/" + src + "' onload='slideInterval(" + k + ")' />");
-                }
-                console.log(file)
-                if ($('#slide').length > 0) {
-                    $('#slide').css({
-                        "opacity": 0
-                    });
-                    setTimeout(function() {
-                        $('.slideShow').html('');
-                        $('.slideShow').append(file)
-                        $('#slide').css({
-                            "opacity": 1
-                        });
-                        if (t == 'mp4')
-                            $('video').trigger('play');
+            // function render_slides(k) {
+            //     if (k >= scount)
+            //         k = 0;
+            //     var src = slides[k]
+            //     k++;
+            //     var t = src.split('.');
+            //     var file;
+            //     t = t[1];
+            //     if (t == 'mp4') {
+            //         file = $("<video id='slide' src='../uploads/" + src + "' onended='render_slides(" + k + ")' autoplay='true' muted='muted'></video>");
+            //     } else {
+            //         file = $("<img id='slide' src='../uploads/" + src + "' onload='slideInterval(" + k + ")' />");
+            //     }
+            //     console.log(file)
+            //     if ($('#slide').length > 0) {
+            //         $('#slide').css({
+            //             "opacity": 0
+            //         });
+            //         setTimeout(function() {
+            //             $('.slideShow').html('');
+            //             $('.slideShow').append(file)
+            //             $('#slide').css({
+            //                 "opacity": 1
+            //             });
+            //             if (t == 'mp4')
+            //                 $('video').trigger('play');
 
 
-                    }, 500)
-                } else {
-                    $('.slideShow').append(file)
-                    $('#slide').css({
-                        "opacity": 1
-                    });
+            //         }, 500)
+            //     } else {
+            //         $('.slideShow').append(file)
+            //         $('#slide').css({
+            //             "opacity": 1
+            //         });
 
-                }
+            //     }
 
-            }
+            // }
 
-            function slideInterval(i = 0) {
-                setTimeout(function() {
-                    render_slides(i)
-                }, 4000)
+            // function slideInterval(i = 0) {
+            //     setTimeout(function() {
+            //         render_slides(i)
+            //     }, 4000)
 
-            }
+            // }
         </script>
 </body>
 
