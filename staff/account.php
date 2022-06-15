@@ -11,9 +11,9 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
 $message1 = "";
 $message2 = "";
 
+$userid = $_SESSION['user']['userid'];
 if (isset($_POST['personal-form'])) {
 
-    $userid = $_SESSION['user']['userid'];
     $firstname = check_input($_POST['firstname']);
     $middlename = check_input($_POST['middlename']);
     $lastname = check_input($_POST['lastname']);
@@ -22,13 +22,41 @@ if (isset($_POST['personal-form'])) {
 
     $sql = "UPDATE user SET firstname = '$firstname', middlename='$middlename', lastname= '$lastname' WHERE userid = $userid";
     $conn->query($sql);
-    $message1 = '';
+    $message1 = '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Success!</strong> Personal information updated.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>';
     $_SESSION['user']['firstname'] = $firstname;
     $_SESSION['user']['middlename'] = $middlename;
     $_SESSION['user']['lastname'] = $lastname;
 }
 
 
+if (isset($_POST['account-form'])) {
+
+
+    $username = check_input($_POST['username']);
+    $oldpass = check_input($_POST['oldpass']);
+    $newpass = check_input($_POST['newpass']);
+
+    $currentpass = $_SESSION['user']['password'];
+
+    if ($currentpass == $oldpass) {
+        $sql = "UPDATE user SET username = '$username', `password`='$newpass' WHERE userid = $userid";
+        $conn->query($sql);
+        $message2 = '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Success.</strong> Credentials updated.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>';
+        $_SESSION['user']['username'] = $username;
+        $_SESSION['user']['password'] = $newpass;
+    } else {
+        $message2 = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Oops. </strong> Incorrect old password.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>';
+    }
+}
 
 function check_input($data)
 {
@@ -68,6 +96,7 @@ $user = $conn->query($sql)->fetch_assoc();
                             <div class="smalltxt mb-2 text-muted fst-italic">Manage and protect your account.</div>
                             <div class="container mt-3">
                                 <div class="h6 fw-bold mb-3">Personal Information</div>
+                                <?= $message1 ?>
                                 <form action="" method="post">
                                     <div class="row align-items-center mb-3">
                                         <div class="col-md-3">
@@ -101,13 +130,14 @@ $user = $conn->query($sql)->fetch_assoc();
                                 </form>
 
                                 <div class="h6 fw-bold mb-3">Credentials</div>
-                                <form action="">
+                                <?= $message2 ?>
+                                <form action="" method="post">
                                     <div class="row align-items-center mb-3">
                                         <div class="col-md-3">
                                             <div class="h6">Username</div>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control round-1" value="<?= $user['username'] ?>" required>
+                                            <input type="text" name="username" class="form-control round-1" value="<?= $user['username'] ?>" required>
                                         </div>
                                     </div>
                                     <div class="row align-items-center mb-3">
@@ -115,22 +145,24 @@ $user = $conn->query($sql)->fetch_assoc();
                                             <div class="h6">Old Password</div>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control round-1 mb-3" required>
+                                            <input type="password" name="oldpass" class="form-control round-1 mb-3" required>
                                         </div>
                                         <div class="col-md-5"></div>
                                         <div class="col-md-3">
                                             <div class="h6 mb-0">New Password</div>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control round-1">
+                                            <input type="password" name="newpass" pattern=".{6,}" class="form-control round-1" required>
+                                            <div class="smalltxt text-muted">Must be 6 characters above.</div>
                                         </div>
                                         <div class="col-md-7">
                                             <div class="text-end mt-4">
-                                                <button type="submit" name="credentials-form" class="btn btn-primary round-1 ">Save <i class="fas fa-save ms-2"></i></button>
+                                                <button type="submit" name="account-form" class="btn btn-primary round-1 ">Save <i class="fas fa-save ms-2"></i></button>
                                             </div>
                                         </div>
                                     </div>
                                 </form>
+
 
                             </div>
                         </div>

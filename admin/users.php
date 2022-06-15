@@ -107,7 +107,7 @@ function check_input($data)
                                         <td>Window ' . $row['windowno'] . '</td>
                                         <td><i class="fa-solid fa-pen-to-square me-3 text-warning pointer" data-bs-toggle="modal" data-bs-target="#exampleModal1" onclick="initEdit(' . $row['userid'] . ',\'' . $row['firstname'] . '\', \'' . $row['middlename'] . '\', \'' . $row['lastname'] . '\', \'' . $row['username'] . '\', ' . $row['counterid'] . ')"></i><i class="fa-solid fa-trash-can text-danger pointer" onclick="deleteMe(' . $row['userid'] . ')"></i>
                                         <a href="access.php?id=' . $row['userid'] . '" class="text-decoration-none badge bg-info text-dark  ms-2">View Access</a></td>
-                                        <td class="text-center"> <a href="access.php?id=' . $row['userid'] . '" class="text-decoration-none text-success" ><i class="fas fa-sync"></i></a></td>
+                                        <td class="text-center"> <span class="text-decoration-none text-success pointer" onclick="resetPass(' . $row['userid'] . ')"><i class="fas fa-sync"></i></span></td>
                                     </tr>';
 
                                             $count++;
@@ -254,6 +254,43 @@ function check_input($data)
                                         position: 'top-end',
                                         icon: 'success',
                                         title: 'User Deleted',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
+
+
+                                }
+                            });
+
+
+
+                        }
+                    })
+                }
+
+                function resetPass(id) {
+                    Swal.fire({
+                        title: 'Reset password?',
+                        text: "Username will be used as temporary password",
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+
+                            $.post('php/resetPass.php', {
+                                userid: id
+
+                            }, function(data) {
+                                // alert(data);
+                                if (data == 1) {
+
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: 'Password Resetted',
                                         showConfirmButton: false,
                                         timer: 1500
                                     })
