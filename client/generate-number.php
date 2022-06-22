@@ -40,9 +40,12 @@ if ($category != 6) {
         $d = $res->fetch_assoc();
 
         $sql = "INSERT INTO queue VALUES(null, '$identification', '$major', $serviceid, " . $d['counterid'] . ", '$token', 1, '$time', 0)";
-        $conn->query($sql);
 
-        echo $conn->insert_id;
+        if ($conn->query($sql)) {
+            echo $conn->insert_id;
+        }
+    } else {
+        echo 'error103';
     }
 } else {
     $sql = "SELECT DISTINCT(userid) FROM access";
@@ -58,13 +61,15 @@ if ($category != 6) {
         if ($res->num_rows > 0) {
             $d = $res->fetch_assoc();
             $sql = "INSERT INTO queue VALUES(null, '$identification', '$major', $serviceid, " . $d['counterid'] . ", '$token', 1, '$time', 0)";
-            $conn->query($sql);
-            echo $conn->insert_id;
+
+            if ($conn->query($sql)) {
+                echo $conn->insert_id;
+            }
         } else {
-            echo 102;
+            echo 'error103';
         }
     } else {
-        echo 102;
+        echo 'error103';
     }
 }
 

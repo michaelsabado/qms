@@ -25,7 +25,7 @@ $counter_id = $_SESSION['user']['counterid'];
         <hr>
 
         <div class="d-flex justify-content-between align-items-center">
-            <div class="h6 fw-  smalltxt mb-0">Counter Status</div>
+            <div class="h6 fw-  smalltxt mb-0">Window Status</div>
             <div class="form-check form-switch mb-0">
 
                 <input class="form-check-input " type="checkbox" role="switch" id="toggleState" <?= ($counter_status == 1) ? 'checked' : '' ?> onchange="changeStatus(<?= $counter_id ?>)">

@@ -114,7 +114,7 @@ include '../database/dbconfig.php';
                             <div class="w-100 h-100 bg-primary d-flex align-items-center justify-content-between br shadow round-1">
 
 
-                                <div class="display-2 fw-bold text-white text-center  tokens" id="c<?= $row['windowno'] ?>-ns" style="width: 60%">-
+                                <div class="display-1 fw-bold text-white text-center  tokens" id="c<?= $row['windowno'] ?>-ns" style="width: 60%">-
                                 </div>
 
                                 <div class="display-2 fw-bold p-1 tokens text-center" id="window<?= $row['windowno'] ?>" style="width: 40%; max-height: 100%; height: 100%; overflow-y: hidden; background-color: rgba(250,250,250,0.5)">
@@ -268,7 +268,7 @@ include '../database/dbconfig.php';
                                             if (next_count <= 3) {
                                                 element = `  <div class="card mb-1 bg-light shadow-sm border-0 round-1">
                                                     <div class="card-body py-1">
-                                                        <div class="h4 mb-0 fw-bold text-center">` + queue.token + `</div>
+                                                        <div class="h2 mb-0 fw-bold text-center">` + queue.token + `</div>
                                                     </div>
                                                 </div>`;
                                                 $('#window' + counter[y].windowno).append(element);

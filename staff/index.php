@@ -41,7 +41,9 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                     <div class="col-md-8">
                         <div class="card round-2 shadow-sm  mb-3" style="   border: 3px solid rgb(13, 110, 253);">
                             <div class="card-body p-4">
-                                <button class="float-end btn btn-light shadow-sm border  round-1" onclick="breakQueue()"><i class="fas fa-stopwatch"></i> Break Queue</button>
+                                <div class="float-end">
+                                    <button class=" btn btn-light shadow-sm border  round-1 me-2" onclick="reQueue()"><i class="fas fa-retweet    "></i> Re-Queue</button> <button class="float-end btn btn-light shadow-sm border  round-1" onclick="breakQueue()"><i class="fas fa-stopwatch"></i> Break Queue</button>
+                                </div>
                                 <div class="h5 fw-bold text-primary">Now Serving</div>
                                 <div class="text- fw- mb-0" style="font-size: 80px;" id="c1-ns">
                                     <div class="spinner-grow text-primary" role="status">
@@ -149,6 +151,17 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
 
                 </div>
             </div>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight1" aria-labelledby="offcanvasRightLabel1">
+                <div class="offcanvas-header">
+                    <h5 id="offcanvasRightLabel1">Transfer Client</h5>
+                    <button type="button" id="close-canvass1" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body" id="show-counter1">
+
+
+
+                </div>
+            </div>
 
             <?php include '../partials/_admin_footer.php' ?>
 
@@ -159,12 +172,21 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                 var nexttoken = 0;
                 var currenttoken_data;
                 var majorid;
-
+                var queueTransfer = 0;
+                var majorTransfer;
 
                 function fetchCounter() {
                     $("#show-counter").load('ajax/fetch-counter.php');
                 }
 
+                function fetchCounter1(qq) {
+                    // alert(qq);
+                    $("#show-counter1").load('ajax/fetch-counter1.php');
+                    queueTransfer = qq;
+                    // majorTransfer = major;
+
+
+                }
 
 
                 document.addEventListener("keydown", function(e) {
@@ -279,7 +301,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                         }).then((result) => {
                             if (result.isConfirmed) {
 
-                                alert("This is: " + active);
+                                // alert("This is: " + active);
 
                                 $.post('ajax/prioritize.php', {
                                     active,
@@ -389,6 +411,83 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
 
                 }
 
+                function reQueue() {
+
+
+
+
+                    if (active != 0) {
+                        Swal.fire({
+                            title: 'Re-Queue Client?',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.post('ajax/requeue.php', {
+                                    currenttoken: currenttoken_data,
+                                    majorid: majorid
+                                }, function(data) {
+                                    // alert(data)
+
+                                    $("#close-canvass").click();
+                                    Swal.fire({
+                                        position: 'top-end',
+                                        icon: 'success',
+                                        title: 'Client Re-Queued',
+                                        showConfirmButton: false,
+                                        timer: 1000
+                                    })
+
+                                    active = 0;
+                                });
+                            }
+                        })
+                    } else {
+                        Swal.fire(
+                            'Oops!',
+                            'Nothing to re-queue',
+                            'info'
+                        )
+                    }
+
+                }
+
+
+
+                function voidToken(id) {
+
+                    Swal.fire({
+                        title: 'Void token?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.post('ajax/void.php', {
+                                currenttoken: id,
+                                nexttoken: nexttoken
+                            }, function(data) {
+
+                            });
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Token voided',
+                                showConfirmButton: false,
+                                timer: 1000
+                            })
+                        }
+                    })
+
+
+
+                }
+
                 function transferMe(counter) {
                     if (currenttoken != 0) {
                         $.post('ajax/transfer.php', {
@@ -421,11 +520,43 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                 }
 
 
+                function transferToken(counter) {
+                    // alert(tokenTransfer);
+                    if (queueTransfer != 0) {
+                        $.post('ajax/transfer1.php', {
+                            counterid: counter,
+                            currenttoken: queueTransfer
+                        }, function(data) {
+                            // alert(data)
+
+                            $("#close-canvass1").click();
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Client transferred',
+                                showConfirmButton: false,
+                                timer: 1000
+                            })
+
+                            majorTransfer = 0;
+                        });
+                    } else {
+                        Swal.fire(
+                            'Oops!',
+                            'Nothing to transfer',
+                            'info'
+                        )
+                    }
+
+                }
+                const browserTitle = document.title;
                 var active = 0;
                 var pending = 0;
                 var served = 0;
-                setInterval(function() {
 
+                var isblink = 0;
+                setInterval(function() {
+                    pending == 0;
 
                     $.post('ajax/fetch-queue.php', function(data) {
                         var queues = JSON.parse(data);
@@ -502,12 +633,13 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
                                         c2++;
                                     }
 
-                                    var element = ` <li class="list-group-item  text-center bg-light  mb-1">
+                                    var element = ` <li class="list-group-item  text-center bg-light  mb-3">
                                         <div class="d-flex justify-content-between">
-                                            <div></div>
-                                            <div class="h5 mb-0 fw-bold">` + queue.token + `</div>
+                                            <div><i class="fas fa-ban pointer text-danger h5 mb-0" onclick="voidToken(` + queue.queueid + `)"></i></div>
+                                            <div class="h5 mb-0 fw-bold">` + queue.token + `<div class="smalltxt fw-light">` + queue.identification + `</div><div class="smalltxt fw-light">` + queue.programdescription + `</div><div class="smalltxt fw-light" style="font-size: 11px">Major in ` + queue.majordescription + `</div></div>
                                             <div><i class="fas fa-running pointer text-primary h5 mb-0" onclick="prio(` + queue.queueid + `)"></i></div>
-                                        </div>
+                                            
+                                        </div><div class="text-end smalltxt mt-2 text-success pointer"  data-bs-toggle="offcanvas" id="open-canvass1" data-bs-target="#offcanvasRight1" aria-controls="offcanvasRight1" onclick="fetchCounter1(` + queue.queueid + `)">Transfer <i class="fas fa-arrow-circle-right ms-2 pointer text-success "></i></div>
                                     </li> `;
 
                                     $('#nextqueue').append(element);
@@ -515,6 +647,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
 
 
                                 if (pending == 0) nexttoken = 0;
+
                             }
 
 
@@ -529,9 +662,62 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['usertype'] != 2) {
 
                     });
 
+                    // let timeoutId;
+                    // let message = "You have client";
 
+                    // const stopBlinking = () => {
+                    //     document.title = browserTitle;
+
+                    // };
+
+                    // const startBlinking = () => {
+
+                    //     document.title = document.title === message ? browserTitle : message;
+                    // };
+                    // console.log(isblink);
+                    // if (isblink == 1) {
+                    //     // const browserTitle = document.title;
+                    //     if (pending != 0) {
+                    //         startBlinking()
+                    //     } else {
+                    //         stopBlinking();
+                    //     }
+                    //     // function registerEvents() {
+                    //     //     window.addEventListener("focus", function(event) {
+
+                    //     //         stopBlinking();
+                    //     //     });
+
+                    //     //     window.addEventListener("blur", function(event) {
+                    //     //         if (pending != 0) {
+                    //     //             timeoutId = setInterval(startBlinking, 200);
+                    //     //         }
+                    //     //     });
+
+
+                    //     // };
+
+                    //     // registerEvents();
+
+                    //     // if (pending != 0) {
+                    //     //     timeoutId = setInterval(startBlinking, 200);
+                    //     // }
+                    // } else {
+                    //     stopBlinking();
+                    // }
 
                 }, 1000)
+
+
+                // window.addEventListener("blur", function(event) {
+
+                //     isblink == 1;
+
+                // });
+                // window.addEventListener("focus", function(event) {
+
+                //     isblink == 0;
+                // });
             </script>
 </body>
 

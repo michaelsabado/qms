@@ -47,6 +47,11 @@ include '../database/dbconfig.php';
             background-color: rgba(250, 250, 250, 0.7);
             backdrop-filter: blur(5px);
         }
+
+
+        .rr {
+            border-radius: 100%;
+        }
     </style>
 </head>
 
@@ -59,11 +64,12 @@ include '../database/dbconfig.php';
 
     </div>
     <div class="d-flex Justify-content-center">
-        <div class="vh-100  d-flex align-items-center flex-column justify-content-center mx-auto" style="width: 40vw;">
+        <div class="vh-100  d-flex align-items-center flex-column justify-content-center mx-auto" style="width:45vw;">
 
 
             <div class="card border-0 round-2  w-100 translucent">
                 <div class="card-body p-5">
+                    <div class="float-end"><button type="button" class="btn btn-warning round-1 shadow-sm" onclick="document.getElementById('queue-form').reset()"> Reset form <i class="fas fa-undo"></i></button></div>
                     <div class="d-flex align-items-center mb-5">
                         <div class=" me-3"><img src="../images/psu.png" height="80" alt=""></div>
                         <div class="text-start">
@@ -73,9 +79,9 @@ include '../database/dbconfig.php';
 
                     </div>
 
-                    <form action="" method="post" id="queue-form">
-                        <div class="h6 fw-bold"><span class="h1 fw-bolder me-3">1.</span> Name</div>
-                        <input type="text" name="identification" class="form-control form-control-lg mb-4 round-1" placeholder="Start here" value="" required>
+                    <form action="" method="post" id="queue-form" autocomplete="off">
+                        <div class="h6 fw-bold"><span class="h1 fw-bolder me-3">1.</span> Enter Name</div>
+                        <input type="text" name="identification" class="form-control form-control-lg mb-4 round-1" placeholder="Start here" value="" autofocus required>
                         <div class="h6 fw-bold"><span class="h1 fw-bolder me-3">2.</span> Select Program</div>
                         <!-- <div class="d-flex justify-content-stretch mb-4">
                             <div class="card text-center p-3 w-100 me-3 fw-bold mybtn round-1 shadow-sm" onclick="selectCounter($(this),2)">
@@ -103,14 +109,14 @@ include '../database/dbconfig.php';
 
                         <select name="major" id="majors" class="form-select form-select-lg mb-4 round-1" required>
 
-
+                            <option value="">- - -</option>
                         </select>
 
                         <div class="h6 fw-bold"><span class="h1 fw-bolder me-3">4.</span> Select Service</div>
                         <div class="row">
                             <div class="col-5">
                                 <select class="form-select form-select-lg mb-2 round-1" name="category" required onchange="fetchServices($(this).val())">
-                                    <option value="">- - -</option>
+                                    <option value="" class="">- - -</option>
                                     <option value="1">Request</option>
                                     <option value="2">Enrollment</option>
                                     <option value="3">Application</option>
@@ -121,7 +127,7 @@ include '../database/dbconfig.php';
                             </div>
                             <div class="col-7">
                                 <select id="services" name="service" class="form-select form-select-lg mb-5 round-1" required>
-
+                                    <option value="">- - -</option>
                                 </select>
                             </div>
                         </div>
@@ -129,6 +135,138 @@ include '../database/dbconfig.php';
 
                         <button type="submit" class="btn btn-lg w-100 btn-primary round-1 shadow" href="generate-number.php">5. Get Number <i class="fas fa-angle-double-right"></i></button>
                     </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div style="position: fixed; bottom: 10px; left: 15px" class="">
+            <div class="h6 text-white pointer" data-bs-toggle="modal" data-bs-target="#exampleModal">Developed by: <u>Sabado et al., 2022</u>
+            </div>
+        </div>
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content round-2 border-0 shadow">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Project Team</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="row gx-4">
+                            <div class="col-md-6">
+                                <div class="card round-2 border bg-light mb-3">
+                                    <div class="card-body">
+
+                                        <div class="h6 fw-bold mb-3">Development Team</div>
+                                        <div class="row g-4 row-cols-3">
+                                            <div class="col">
+                                                <div class="px-3">
+                                                    <img src="../devs/michael.jpg" class="img-fluid rr mb-3" alt="">
+
+                                                </div>
+                                                <div class="smalltxt fw-bold text-center">Michael Sabado</div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="px-3">
+                                                    <img src="../devs/chan.jpg" class="img-fluid rr mb-3" alt="">
+
+                                                </div>
+                                                <div class="smalltxt fw-bold text-center">Christian Fernandez</div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card round-2 border bg-light">
+                                    <div class="card-body">
+
+                                        <div class="h6 fw-bold mb-3">System Testers</div>
+                                        <div class="row g-4 row-cols-3">
+
+
+                                            <div class="col">
+                                                <div class="px-3">
+                                                    <img src="../devs/brix.jpg" class="img-fluid rr mb-3" alt="">
+
+                                                </div>
+                                                <div class="smalltxt fw-bold text-center">Eugene Madronio</div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="px-3">
+                                                    <img src="../devs/mark.jpg" class="img-fluid rr mb-3" alt="">
+
+                                                </div>
+                                                <div class="smalltxt fw-bold text-center">Mark Emperador</div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card round-2 border bg-light mb-3">
+                                    <div class="card-body">
+
+                                        <div class="h6 fw-bold mb-3">Implementation Team</div>
+                                        <div class="row g-4 row-cols-3">
+                                            <div class="col">
+                                                <div class="px-3">
+                                                    <img src="../devs/reymart.jpg" class="img-fluid rr mb-3" alt="">
+
+                                                </div>
+                                                <div class="smalltxt fw-bold text-center">Reymart De Chavez</div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="px-3">
+                                                    <img src="../devs/tim.jpg" class="img-fluid rr mb-3" alt="">
+
+                                                </div>
+                                                <div class="smalltxt fw-bold text-center">Timothy Gonzales</div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="px-3">
+                                                    <img src="../devs/rafael.jpg" class="img-fluid rr mb-3" alt="">
+
+                                                </div>
+                                                <div class="smalltxt fw-bold text-center">Rafael Vingua</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card round-2 border bg-light mb-3">
+                                    <div class="card-body">
+
+                                        <div class="h6 fw-bold mb-3">Data Gatherers</div>
+                                        <div class="row g-4 row-cols-3">
+                                            <div class="col">
+                                                <div class="px-3">
+                                                    <img src="../devs/aaron.jpg" class="img-fluid rr mb-3" alt="">
+
+                                                </div>
+                                                <div class="smalltxt fw-bold text-center">Joeaaron Castaneda</div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="px-3">
+                                                    <img src="../devs/jep.jpg" class="img-fluid rr mb-3" alt="">
+
+                                                </div>
+                                                <div class="smalltxt fw-bold text-center">Jefferson Cacho</div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -157,13 +295,18 @@ include '../database/dbconfig.php';
 
             $("#queue-form").submit(function(e) {
                 e.preventDefault();
-
+                console.log($("#queue-form").serialize());
                 $.post('generate-number.php', $("#queue-form").serialize(), function(data) {
-                    // alert(data);
-                    if (data == 102) {
-                        alert("Service unavailable. Sorry for the inconvenience.");
-                        $("#queue-form").reset();
-                    } else {
+
+                    if (data == 'error103') {
+
+                        Swal.fire(
+                            'Service not available',
+                            'Please approach our staffs',
+                            'info'
+                        )
+                        document.querySelector("#queue-form").reset();
+                    } else if (!isNaN(data)) {
                         $("#queue-form")[0].reset();
                         $(".mybtn").removeClass('text-white bg-success');
 
@@ -172,6 +315,9 @@ include '../database/dbconfig.php';
                         // var win = window.open(URL, "_blank", strWindowFeatures);
 
                         window.location.href = URL;
+
+                    } else {
+
                     }
 
 
